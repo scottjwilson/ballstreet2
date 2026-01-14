@@ -1,0 +1,16 @@
+{
+  "name": "the-theme",
+  "version": "1.0.0",
+  "description": "A minimal WordPress theme boilerplate with Vite",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "vite": "^5.0.0"
+  }
+}

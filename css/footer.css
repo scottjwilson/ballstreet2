@@ -1,0 +1,35 @@
+/**
+ * Footer CSS
+ * Styles for site footer
+ */
+
+.site-footer {
+  margin-top: auto;
+}
+
+.footer-main {
+  background-color: var(--theme-navy);
+  border-top: 2px solid var(--theme-gold);
+  color: white;
+  padding: 3rem 0;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  border-top: 1px solid var(--gray-700);
+  padding-top: 2rem;
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+  .footer-main {
+    padding: 2rem 0;
+  }
+}
