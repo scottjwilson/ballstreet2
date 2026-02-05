@@ -83,7 +83,9 @@ function ballstreet_enqueue_assets(): void
     // Check if Vite handles assets
     if (function_exists("ballstreet_detect_vite_server")) {
         $vite = ballstreet_detect_vite_server();
-        $has_manifest = file_exists(get_theme_file_path("dist/manifest.json"));
+        $has_manifest = file_exists(
+            get_theme_file_path("dist/.vite/manifest.json"),
+        );
 
         if ($vite["running"] || $has_manifest) {
             return;
