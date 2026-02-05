@@ -21,6 +21,7 @@ import "../css/athletes-table.css";
 import "../css/single-athlete.css";
 import "../css/archive.css";
 import "../css/single.css";
+import "../css/single-deal.css";
 
 (function () {
   "use strict";
