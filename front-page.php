@@ -9,11 +9,6 @@
 
 get_header(); ?>
 
-<!-- CATEGORY TABS -->
-<div class="category-nav fade-in">
-    <?php ballstreet_render_category_tabs(); ?>
-</div>
-
 <!-- HERO SECTION -->
 <section class="hero">
     <?php ballstreet_render_hero_article(); ?>

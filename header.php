@@ -26,20 +26,14 @@
 
         <nav class="nav">
             <a href="<?php echo esc_url(
-                home_url("/category/nil-deals"),
-            ); ?>" class="nav-link">NIL Deals</a>
+                home_url("/news"),
+            ); ?>" class="nav-link">News</a>
             <a href="<?php echo esc_url(
-                home_url("/category/contracts"),
-            ); ?>" class="nav-link">Contracts</a>
-            <a href="<?php echo esc_url(
-                home_url("/category/betting"),
-            ); ?>" class="nav-link">Betting</a>
-            <a href="<?php echo esc_url(
-                home_url("/category/analysis"),
-            ); ?>" class="nav-link">Analysis</a>
+                home_url("/deals"),
+            ); ?>" class="nav-link">Deals</a>
             <a href="<?php echo esc_url(
                 home_url("/athletes"),
-            ); ?>" class="nav-link">Database</a>
+            ); ?>" class="nav-link">Athletes</a>
 
             <!-- Theme Toggle -->
             <button class="theme-toggle" type="button" aria-label="Switch to light mode">
@@ -78,20 +72,14 @@
 <!-- Mobile Navigation -->
 <nav class="nav-mobile">
     <a href="<?php echo esc_url(
-        home_url("/category/nil-deals"),
-    ); ?>" class="nav-link">NIL Deals</a>
+        home_url("/news"),
+    ); ?>" class="nav-link">News</a>
     <a href="<?php echo esc_url(
-        home_url("/category/contracts"),
-    ); ?>" class="nav-link">Contracts</a>
-    <a href="<?php echo esc_url(
-        home_url("/category/betting"),
-    ); ?>" class="nav-link">Betting</a>
-    <a href="<?php echo esc_url(
-        home_url("/category/analysis"),
-    ); ?>" class="nav-link">Analysis</a>
+        home_url("/deals"),
+    ); ?>" class="nav-link">Deals</a>
     <a href="<?php echo esc_url(
         home_url("/athletes"),
-    ); ?>" class="nav-link">Database</a>
+    ); ?>" class="nav-link">Athletes</a>
 
     <!-- Theme Toggle (Mobile) -->
     <button class="theme-toggle theme-toggle-mobile" type="button" aria-label="Switch to light mode">
