@@ -859,6 +859,113 @@ function ballstreet_render_article_rows(int $count = 5): void
 }
 
 /**
+ * Render athlete profile rows for front page
+ *
+ * @param int $count Number of athletes to show
+ */
+function ballstreet_render_athlete_rows(int $count = 5): void
+{
+    $args = [
+        "post_type" => "athlete",
+        "posts_per_page" => $count,
+        "post_status" => "publish",
+        "meta_query" => [
+            "relation" => "OR",
+            "nil_clause" => [
+                "key" => "nil_valuation",
+                "compare" => "EXISTS",
+            ],
+            "val_clause" => [
+                "key" => "valuation",
+                "compare" => "EXISTS",
+            ],
+        ],
+        "orderby" => [
+            "nil_clause" => "DESC",
+            "val_clause" => "DESC",
+        ],
+    ];
+
+    $query = new WP_Query($args);
+    $rank = 1;
+
+    if ($query->have_posts()):
+        while ($query->have_posts()):
+
+            $query->the_post();
+            $athlete_id = get_the_ID();
+            $fields = ballstreet_get_athlete_fields($athlete_id);
+            $nil_value = $fields["nil_valuation"];
+            $formatted_nil = ballstreet_format_value($nil_value);
+            $position = $fields["position"];
+            $school = $fields["school_name"];
+            $has_thumbnail = has_post_thumbnail();
+            ?>
+            <article class="athlete-row <?php echo $has_thumbnail
+                ? "has-thumbnail"
+                : ""; ?> fade-in">
+                <a href="<?php the_permalink(); ?>" class="athlete-row-link">
+                    <div class="athlete-row-rank">
+                        <span class="rank-number">#<?php echo $rank; ?></span>
+                    </div>
+                    <div class="athlete-row-avatar">
+                        <?php if ($has_thumbnail): ?>
+                            <?php the_post_thumbnail("thumbnail", [
+                                "class" => "athlete-row-photo",
+                            ]); ?>
+                        <?php else: ?>
+                            <span class="athlete-row-initials"><?php echo esc_html(
+                                substr(get_the_title(), 0, 2),
+                            ); ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="athlete-row-info">
+                        <h3 class="athlete-row-name"><?php the_title(); ?></h3>
+                        <div class="athlete-row-meta">
+                            <?php if ($position): ?>
+                                <span class="athlete-row-position"><?php echo esc_html(
+                                    $position,
+                                ); ?></span>
+                            <?php endif; ?>
+                            <?php if ($position && $school): ?>
+                                <span class="athlete-row-sep">·</span>
+                            <?php endif; ?>
+                            <?php if ($school): ?>
+                                <span class="athlete-row-school"><?php echo esc_html(
+                                    $school,
+                                ); ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="athlete-row-value">
+                        <span class="athlete-row-nil"><?php echo esc_html(
+                            $formatted_nil,
+                        ); ?></span>
+                        <span class="athlete-row-label">NIL Value</span>
+                    </div>
+                    <div class="athlete-row-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+            </article>
+            <?php $rank++;
+        endwhile;
+        wp_reset_postdata();
+        // Placeholder when no athletes exist
+    else:
+         ?>
+        <div class="athletes-empty">
+            <p>No athletes found. <a href="<?php echo admin_url(
+                "post-new.php?post_type=athlete",
+            ); ?>">Add athletes</a> to see them here.</p>
+        </div>
+        <?php
+    endif;
+}
+
+/**
  * Calculate read time for content
  *
  * @param string $content Post content

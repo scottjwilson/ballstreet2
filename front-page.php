@@ -34,27 +34,49 @@ get_header(); ?>
     </div>
 
     <div class="deals-grid">
-        <?php ballstreet_render_deals_grid(3); ?>
+        <?php ballstreet_render_deals_grid(3, false); ?>
     </div>
 </section>
 
-<!-- ARTICLES SECTION -->
-<section class="articles-section">
+<!-- ATHLETES SECTION -->
+<section class="athletes-section">
     <div class="section-header fade-in">
         <h2 class="section-title">
-            <span class="icon">📊</span>
-            Latest Analysis
+            <span class="icon">🏆</span>
+            Top Athletes
         </h2>
         <a href="<?php echo esc_url(
-            home_url("/category/analysis"),
+            home_url("/athletes"),
         ); ?>" class="section-link">
-            View all articles
+            View all athletes
             <span>→</span>
         </a>
     </div>
 
-    <div class="articles-list">
-        <?php ballstreet_render_article_rows(5); ?>
+    <div class="athletes-list">
+        <?php ballstreet_render_athlete_rows(5); ?>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="about-section fade-in">
+    <div class="about-content">
+        <h2 class="about-title">The Business of Sports, Decoded</h2>
+        <p class="about-desc">Ball Street Sports Journal is your source for the financial side of athletics. We track NIL deals, contract negotiations, trades, and market movements across college and professional sports.</p>
+        <div class="about-features">
+            <div class="about-feature">
+                <span class="about-feature-icon">📊</span>
+                <span class="about-feature-text">Real-time deal tracking</span>
+            </div>
+            <div class="about-feature">
+                <span class="about-feature-icon">💰</span>
+                <span class="about-feature-text">NIL valuations</span>
+            </div>
+            <div class="about-feature">
+                <span class="about-feature-icon">📈</span>
+                <span class="about-feature-text">Market analysis</span>
+            </div>
+        </div>
     </div>
 </section>
 
