@@ -515,23 +515,59 @@ function ballstreet_render_article_rows(int $count = 5): void
             $cat_name = !empty($category)
                 ? strtoupper($category[0]->name)
                 : "NEWS";
+            $cat_slug = !empty($category) ? $category[0]->slug : "news";
+            $cat_class = ballstreet_get_category_class($cat_slug);
             $read_time = ballstreet_get_read_time(get_the_content());
             $is_hot = get_post_meta(get_the_ID(), "is_hot", true);
+            $has_thumbnail = has_post_thumbnail();
+            $time_ago =
+                human_time_diff(get_the_time("U"), current_time("timestamp")) .
+                " ago";
             ?>
-            <article class="article-row fade-in">
-                <a href="<?php the_permalink(); ?>">
-                    <span class="article-category"><?php echo esc_html(
-                        $cat_name,
-                    ); ?></span>
-                    <h3 class="article-title">
-                        <?php the_title(); ?>
-                        <?php if ($is_hot): ?>
-                            <span class="hot-badge">HOT</span>
+            <article class="article-row <?php echo $has_thumbnail
+                ? "has-thumbnail"
+                : ""; ?> fade-in">
+                <a href="<?php the_permalink(); ?>" class="article-row-link">
+                    <?php if ($has_thumbnail): ?>
+                    <div class="article-thumbnail">
+                        <?php the_post_thumbnail("medium", [
+                            "class" => "article-thumb-img",
+                        ]); ?>
+                    </div>
+                    <?php endif; ?>
+                    <div class="article-content">
+                        <div class="article-meta-top">
+                            <span class="article-category <?php echo esc_attr(
+                                $cat_class,
+                            ); ?>"><?php echo esc_html($cat_name); ?></span>
+                            <?php if ($is_hot): ?>
+                                <span class="hot-badge">HOT</span>
+                            <?php endif; ?>
+                        </div>
+                        <h3 class="article-title"><?php the_title(); ?></h3>
+                        <?php if (has_excerpt()): ?>
+                            <p class="article-excerpt"><?php echo wp_trim_words(
+                                get_the_excerpt(),
+                                15,
+                            ); ?></p>
                         <?php endif; ?>
-                    </h3>
-                    <span class="article-time"><?php echo esc_html(
-                        $read_time,
-                    ); ?> min read</span>
+                        <div class="article-meta-bottom">
+                            <span class="article-author"><?php echo get_the_author(); ?></span>
+                            <span class="article-meta-sep">·</span>
+                            <span class="article-time"><?php echo esc_html(
+                                $time_ago,
+                            ); ?></span>
+                            <span class="article-meta-sep">·</span>
+                            <span class="article-read-time"><?php echo esc_html(
+                                $read_time,
+                            ); ?> min read</span>
+                        </div>
+                    </div>
+                    <div class="article-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
                 </a>
             </article>
             <?php
@@ -541,58 +577,112 @@ function ballstreet_render_article_rows(int $count = 5): void
     else:
         $placeholders = [
             [
-                "category" => "BETTING MARKETS",
+                "category" => "BETTING",
+                "class" => "betting",
                 "title" =>
                     "Super Bowl Odds Shift Dramatically After Chiefs Clinch",
+                "excerpt" =>
+                    "Vegas oddsmakers react to Kansas City's dominant playoff run with significant line movements.",
                 "hot" => true,
                 "time" => "8",
+                "author" => "Marcus Chen",
+                "ago" => "2 hours ago",
             ],
             [
-                "category" => "NIL ANALYSIS",
+                "category" => "NIL",
+                "class" => "nil",
                 "title" =>
                     'The $50M Question: Are College Athletes Overvalued?',
+                "excerpt" =>
+                    "A deep dive into NIL market corrections and what they mean for the future of college sports.",
                 "hot" => false,
                 "time" => "15",
+                "author" => "Sarah Williams",
+                "ago" => "4 hours ago",
             ],
             [
                 "category" => "CONTRACTS",
+                "class" => "contracts",
                 "title" =>
                     'NBA Max Contracts: Who\'s Actually Worth It in 2025?',
+                "excerpt" =>
+                    "Analyzing the league's highest-paid players and their on-court production metrics.",
                 "hot" => true,
                 "time" => "11",
+                "author" => "James Rodriguez",
+                "ago" => "6 hours ago",
             ],
             [
                 "category" => "BUSINESS",
+                "class" => "nil",
                 "title" =>
                     'Private Equity\'s Quiet Takeover of Minor League Baseball',
+                "excerpt" =>
+                    "How investment firms are reshaping America's pastime from the ground up.",
                 "hot" => false,
                 "time" => "18",
+                "author" => "Emily Park",
+                "ago" => "8 hours ago",
             ],
             [
-                "category" => "TRADE ANALYSIS",
+                "category" => "ANALYSIS",
+                "class" => "contracts",
                 "title" =>
                     "Breaking Down the Cap Implications of the Davante Adams Trade",
+                "excerpt" =>
+                    "The salary cap gymnastics behind the blockbuster move and what it means for both teams.",
                 "hot" => false,
                 "time" => "9",
+                "author" => "Michael Torres",
+                "ago" => "12 hours ago",
             ],
         ];
 
         foreach ($placeholders as $item): ?>
             <article class="article-row fade-in">
-                <span class="article-category"><?php echo esc_html(
-                    $item["category"],
-                ); ?></span>
-                <h3 class="article-title">
-                    <?php echo esc_html($item["title"]); ?>
-                    <?php if ($item["hot"]): ?>
-                        <span class="hot-badge">HOT</span>
-                    <?php endif; ?>
-                </h3>
-                <span class="article-time"><?php echo esc_html(
-                    $item["time"],
-                ); ?> min read</span>
+                <a href="#" class="article-row-link">
+                    <div class="article-thumbnail article-thumbnail-placeholder">
+                        <span class="placeholder-icon">📰</span>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta-top">
+                            <span class="article-category <?php echo esc_attr(
+                                $item["class"],
+                            ); ?>"><?php echo esc_html(
+    $item["category"],
+); ?></span>
+                            <?php if ($item["hot"]): ?>
+                                <span class="hot-badge">HOT</span>
+                            <?php endif; ?>
+                        </div>
+                        <h3 class="article-title"><?php echo esc_html(
+                            $item["title"],
+                        ); ?></h3>
+                        <p class="article-excerpt"><?php echo esc_html(
+                            $item["excerpt"],
+                        ); ?></p>
+                        <div class="article-meta-bottom">
+                            <span class="article-author"><?php echo esc_html(
+                                $item["author"],
+                            ); ?></span>
+                            <span class="article-meta-sep">·</span>
+                            <span class="article-time"><?php echo esc_html(
+                                $item["ago"],
+                            ); ?></span>
+                            <span class="article-meta-sep">·</span>
+                            <span class="article-read-time"><?php echo esc_html(
+                                $item["time"],
+                            ); ?> min read</span>
+                        </div>
+                    </div>
+                    <div class="article-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
             </article>
-            <?php endforeach;
+        <?php endforeach;
     endif;
 }
 

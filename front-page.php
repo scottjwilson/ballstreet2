@@ -53,7 +53,9 @@ get_header(); ?>
         </a>
     </div>
 
-    <?php ballstreet_render_article_rows(5); ?>
+    <div class="articles-list">
+        <?php ballstreet_render_article_rows(5); ?>
+    </div>
 </section>
 
 <!-- NEWSLETTER -->
