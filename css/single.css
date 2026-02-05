@@ -1,0 +1,299 @@
+/*
+ * Ball Street Sports Journal
+ * Single Post/Article Styles
+ */
+
+/* ========================================
+   ARTICLE HEADER
+   ======================================== */
+
+.article-header {
+  margin-bottom: 40px;
+}
+
+.article-header-category {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.article-header-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.article-header-excerpt {
+  font-size: 18px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+
+.article-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--text-muted);
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.article-author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.article-author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-author-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ========================================
+   FEATURED IMAGE
+   ======================================== */
+
+.article-featured-image {
+  margin-bottom: 48px;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.article-featured-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================
+   ARTICLE CONTENT
+   ======================================== */
+
+.article-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-top: 40px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.article-content p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.article-content a {
+  color: var(--accent-green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-content a:hover {
+  color: var(--accent-green-hover);
+}
+
+.article-content ul,
+.article-content ol {
+  margin-bottom: 24px;
+  padding-left: 24px;
+}
+
+.article-content li {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.article-content ul li {
+  list-style-type: disc;
+}
+
+.article-content ol li {
+  list-style-type: decimal;
+}
+
+.article-content blockquote {
+  margin: 32px 0;
+  padding: 24px 32px;
+  background: var(--bg-card);
+  border-left: 4px solid var(--accent-green);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+.article-content blockquote p {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: 0;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  margin: 32px 0;
+}
+
+.article-content figure {
+  margin: 32px 0;
+}
+
+.article-content figcaption {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 12px;
+}
+
+.article-content pre,
+.article-content code {
+  font-family: var(--font-mono);
+}
+
+.article-content code {
+  font-size: 14px;
+  background: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-green);
+}
+
+.article-content pre {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  margin: 32px 0;
+}
+
+.article-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ========================================
+   ARTICLE TAGS
+   ======================================== */
+
+.article-tags {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.article-tag {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.article-tag:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   RELATED ARTICLES
+   ======================================== */
+
+.related-articles {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border-color);
+}
+
+.related-articles-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .article-header-title {
+    font-size: 28px;
+  }
+
+  .article-header-excerpt {
+    font-size: 16px;
+  }
+
+  .article-header-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .article-content p,
+  .article-content li {
+    font-size: 16px;
+  }
+
+  .article-content h2 {
+    font-size: 24px;
+  }
+
+  .article-content h3 {
+    font-size: 20px;
+  }
+
+  .article-content blockquote {
+    padding: 20px 24px;
+  }
+
+  .article-content blockquote p {
+    font-size: 18px;
+  }
+}

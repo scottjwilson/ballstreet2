@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta charset="<?php bloginfo("charset"); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php wp_head(); ?>
 </head>
@@ -9,54 +9,103 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<header class="site-header">
-    <div class="container">
-        <div class="header-inner">
-            <!-- Logo -->
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
-                <span class="logo-icon">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <circle cx="8" cy="8" r="6" fill="currentColor"/>
-                    </svg>
-                </span>
-                Fieldcraft
-            </a>
-
-            <!-- Desktop Navigation -->
-            <nav class="nav-desktop">
-                <ul class="nav-menu">
-                    <li><a href="<?php echo esc_url(home_url('/')); ?>" class="nav-link">Home</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/about')); ?>" class="nav-link">About</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/services')); ?>" class="nav-link">Features</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/pricing')); ?>" class="nav-link">Pricing</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/resources')); ?>" class="nav-link">Resources</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <a href="<?php echo esc_url(home_url('/login')); ?>" class="btn btn-ghost">Login</a>
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary">Register</a>
-                </div>
-            </nav>
-
-            <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
-                <span class="icon-menu"><?php echo fieldcraft_icon('menu', 24); ?></span>
-                <span class="icon-close"><?php echo fieldcraft_icon('close', 24); ?></span>
-            </button>
-        </div>
+<!-- LIVE TICKER -->
+<div class="ticker-bar">
+    <div class="ticker-wrapper">
+        <?php ballstreet_render_ticker(); ?>
     </div>
+</div>
 
-    <!-- Mobile Navigation -->
-    <nav class="nav-mobile">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="nav-link">Home</a>
-        <a href="<?php echo esc_url(home_url('/about')); ?>" class="nav-link">About</a>
-        <a href="<?php echo esc_url(home_url('/services')); ?>" class="nav-link">Features</a>
-        <a href="<?php echo esc_url(home_url('/pricing')); ?>" class="nav-link">Pricing</a>
-        <a href="<?php echo esc_url(home_url('/resources')); ?>" class="nav-link">Resources</a>
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-            <a href="<?php echo esc_url(home_url('/login')); ?>" class="btn btn-outline">Login</a>
-            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary">Register</a>
-        </div>
-    </nav>
+<!-- HEADER -->
+<header class="header">
+    <div class="header-inner">
+        <a href="<?php echo esc_url(home_url("/")); ?>" class="logo">
+            <span class="logo-mark">Ball Street</span>
+            <span class="logo-text">Sports Journal</span>
+        </a>
+
+        <nav class="nav">
+            <a href="<?php echo esc_url(
+                home_url("/category/nil-deals"),
+            ); ?>" class="nav-link">NIL Deals</a>
+            <a href="<?php echo esc_url(
+                home_url("/category/contracts"),
+            ); ?>" class="nav-link">Contracts</a>
+            <a href="<?php echo esc_url(
+                home_url("/category/betting"),
+            ); ?>" class="nav-link">Betting</a>
+            <a href="<?php echo esc_url(
+                home_url("/category/analysis"),
+            ); ?>" class="nav-link">Analysis</a>
+            <a href="<?php echo esc_url(
+                home_url("/athletes"),
+            ); ?>" class="nav-link">Database</a>
+
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+                <span class="icon-sun"><?php echo ballstreet_icon(
+                    "sun",
+                    20,
+                ); ?></span>
+                <span class="icon-moon"><?php echo ballstreet_icon(
+                    "moon",
+                    20,
+                ); ?></span>
+            </button>
+
+            <a href="<?php echo esc_url(
+                home_url("/subscribe"),
+            ); ?>" class="nav-cta">Subscribe</a>
+        </nav>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
+            <span class="icon-menu"><?php echo ballstreet_icon(
+                "menu",
+                24,
+            ); ?></span>
+            <span class="icon-close"><?php echo ballstreet_icon(
+                "close",
+                24,
+            ); ?></span>
+        </button>
+    </div>
 </header>
 
-<main class="main-content">
+<!-- Mobile Navigation Overlay -->
+<div class="nav-overlay"></div>
+
+<!-- Mobile Navigation -->
+<nav class="nav-mobile">
+    <a href="<?php echo esc_url(
+        home_url("/category/nil-deals"),
+    ); ?>" class="nav-link">NIL Deals</a>
+    <a href="<?php echo esc_url(
+        home_url("/category/contracts"),
+    ); ?>" class="nav-link">Contracts</a>
+    <a href="<?php echo esc_url(
+        home_url("/category/betting"),
+    ); ?>" class="nav-link">Betting</a>
+    <a href="<?php echo esc_url(
+        home_url("/category/analysis"),
+    ); ?>" class="nav-link">Analysis</a>
+    <a href="<?php echo esc_url(
+        home_url("/athletes"),
+    ); ?>" class="nav-link">Database</a>
+
+    <!-- Theme Toggle (Mobile) -->
+    <button class="theme-toggle theme-toggle-mobile" type="button" aria-label="Switch to light mode">
+        <span class="icon-sun"><?php echo ballstreet_icon("sun", 20); ?></span>
+        <span class="icon-moon"><?php echo ballstreet_icon(
+            "moon",
+            20,
+        ); ?></span>
+        <span class="theme-toggle-label">Toggle Theme</span>
+    </button>
+
+    <a href="<?php echo esc_url(
+        home_url("/subscribe"),
+    ); ?>" class="nav-cta">Subscribe</a>
+</nav>
+
+<main class="main">

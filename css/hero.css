@@ -1,0 +1,197 @@
+/*
+ * Ball Street Sports Journal
+ * Hero Section Styles
+ */
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-bottom: var(--section-gap);
+}
+
+/* ========================================
+   HERO MAIN ARTICLE
+   ======================================== */
+
+.hero-main {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    background: var(--hero-gradient);
+    min-height: 480px;
+    cursor: pointer;
+    transition: transform var(--transition-base);
+    text-decoration: none;
+    display: block;
+    border: 1px solid var(--border-color);
+}
+
+.hero-main:hover {
+    transform: scale(1.01);
+}
+
+.hero-main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at 30% 70%,
+            var(--hero-overlay-1) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 70% 30%,
+            var(--hero-overlay-2) 0%,
+            transparent 50%
+        );
+    z-index: 1;
+}
+
+/* Hero background image (when available) */
+.hero-main-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ========================================
+   HERO SYMBOL (Decorative)
+   ======================================== */
+
+.hero-symbol {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 320px;
+    color: var(--hero-symbol-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    font-style: italic;
+    z-index: 1;
+}
+
+/* ========================================
+   HERO CONTENT
+   ======================================== */
+
+.hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    background: var(--hero-content-bg);
+    z-index: 2;
+}
+
+.hero-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--accent-green);
+    background: var(--accent-green-dim);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: 38px;
+    line-height: 1.15;
+    color: var(--hero-title-color);
+    margin-bottom: 12px;
+    max-width: 90%;
+}
+
+.hero-subtitle {
+    font-size: 16px;
+    color: var(--hero-subtitle-color);
+    margin-bottom: 20px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--hero-meta-color);
+}
+
+.hero-author {
+    font-weight: 500;
+    color: var(--hero-author-color);
+}
+
+/* ========================================
+   HERO SIDEBAR
+   ======================================== */
+
+.hero-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-sidebar {
+        flex-direction: row;
+    }
+
+    .hero-sidebar .sidebar-card {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-main {
+        min-height: 400px;
+    }
+
+    .hero-title {
+        font-size: 28px;
+    }
+
+    .hero-content {
+        padding: 24px;
+    }
+
+    .hero-subtitle {
+        font-size: 14px;
+        max-width: 100%;
+    }
+
+    .hero-sidebar {
+        flex-direction: column;
+    }
+
+    .hero-symbol {
+        font-size: 200px;
+    }
+}

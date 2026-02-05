@@ -1,0 +1,282 @@
+/*
+ * Ball Street Sports Journal
+ * Archive Page Styles
+ */
+
+/* ========================================
+   ARCHIVE HEADER
+   ======================================== */
+
+.archive-header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.archive-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.archive-description {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 600px;
+}
+
+.archive-count {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+}
+
+/* ========================================
+   ARCHIVE FILTERS
+   ======================================== */
+
+.archive-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.archive-filter {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.archive-filter:hover {
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+}
+
+.archive-filter.active {
+    background: var(--accent-green);
+    color: #000;
+    border-color: var(--accent-green);
+}
+
+/* ========================================
+   ARCHIVE GRID
+   ======================================== */
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .archive-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   ATHLETE CARD
+   ======================================== */
+
+.athlete-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.athlete-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--border-color-hover);
+}
+
+.athlete-card-image {
+    aspect-ratio: 1;
+    background: var(--bg-elevated);
+    overflow: hidden;
+}
+
+.athlete-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+}
+
+.athlete-card:hover .athlete-card-image img {
+    transform: scale(1.05);
+}
+
+.athlete-card-content {
+    padding: 20px;
+}
+
+.athlete-card-position {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.athlete-card-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.athlete-card-school {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.athlete-card-valuation {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.athlete-card-value {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.athlete-card-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ========================================
+   PAGINATION
+   ======================================== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-color);
+}
+
+.pagination .nav-links {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.pagination a:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+}
+
+.pagination .current {
+    background: var(--accent-green);
+    color: #000;
+    border-color: var(--accent-green);
+}
+
+.pagination .prev,
+.pagination .next {
+    padding: 0 16px;
+}
+
+/* ========================================
+   ATHLETE TABLE (Alternative View)
+   ======================================== */
+
+.athlete-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.athlete-table th,
+.athlete-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.athlete-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    background: var(--bg-card);
+}
+
+.athlete-table tr:hover td {
+    background: var(--row-hover-bg);
+}
+
+.athlete-table-rank {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    width: 60px;
+}
+
+.athlete-table-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.athlete-table-position {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-green);
+}
+
+.athlete-table-school {
+    color: var(--text-secondary);
+}
+
+.athlete-table-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-primary);
+}

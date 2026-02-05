@@ -2,26 +2,25 @@
 /**
  * 404 Error Page
  *
- * @package Fieldcraft
+ * @package BallStreet
  */
 
-get_header();
-?>
+get_header(); ?>
 
-<section class="hero" style="min-height: 70vh; display: flex; align-items: center;">
-    <div class="container">
-        <div class="hero-content">
-            <p style="font-family: var(--font-display); font-size: 8rem; font-weight: 700; color: var(--color-neutral-200); line-height: 1; margin-bottom: 1rem;">404</p>
-            <h1 class="text-display">Page Not Found</h1>
-            <p class="hero-subtitle">The page you're looking for doesn't exist or has been moved.</p>
-            <div class="hero-actions">
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary btn-lg">
-                    Back to Home <?php echo fieldcraft_icon('arrow-right'); ?>
-                </a>
-                <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-outline btn-lg">Contact Us</a>
-            </div>
-        </div>
+<div class="error-page" style="min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px;">
+    <div style="font-family: var(--font-display); font-size: clamp(6rem, 15vw, 10rem); font-weight: 400; color: var(--bg-card); line-height: 1; margin-bottom: 16px;">404</div>
+    <h1 style="font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2.5rem); color: var(--text-primary); margin-bottom: 16px;">Page Not Found</h1>
+    <p style="font-size: 16px; color: var(--text-secondary); max-width: 480px; margin-bottom: 32px;">The page you're looking for doesn't exist or has been moved. Try searching or head back to the homepage.</p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+        <a href="<?php echo esc_url(home_url("/")); ?>" class="btn btn-primary">
+            Back to Home
+        </a>
+        <a href="<?php echo esc_url(
+            home_url("/contact"),
+        ); ?>" class="btn btn-secondary">
+            Contact Us
+        </a>
     </div>
-</section>
+</div>
 
 <?php get_footer(); ?>

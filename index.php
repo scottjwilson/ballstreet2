@@ -1,54 +1,75 @@
 <?php
 /**
- * Main template file
+ * Main Template File
  *
- * @package Fieldcraft
+ * The blog/news listing page
+ *
+ * @package BallStreet
  */
 
-get_header();
-?>
+get_header(); ?>
 
-<section class="section">
-    <div class="container">
-        <?php if (have_posts()) : ?>
-            <div class="grid grid-3">
-                <?php while (have_posts()) : the_post(); ?>
-                    <article class="card card-hover">
-                        <?php if (has_post_thumbnail()) : ?>
-                            <div style="aspect-ratio: 16/10; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem;">
-                                <?php the_post_thumbnail('fieldcraft-card', ['style' => 'width: 100%; height: 100%; object-fit: cover;']); ?>
-                            </div>
-                        <?php endif; ?>
+<div class="section-header fade-in">
+    <h1 class="section-title">
+        <span class="icon">📰</span>
+        <?php if (is_category()) {
+            single_cat_title("");
+        } elseif (is_tag()) {
+            single_tag_title("");
+        } elseif (is_search()) {
+            printf(
+                __("Search Results for: %s", "ballstreet"),
+                get_search_query(),
+            );
+        } else {
+            _e("Latest News", "ballstreet");
+        } ?>
+    </h1>
+</div>
 
-                        <span style="font-size: 0.75rem; color: var(--color-neutral-500);">
-                            <?php echo get_the_date('M j, Y'); ?>
-                        </span>
-
-                        <h3 style="font-size: 1.125rem; margin: 0.5rem 0;">
-                            <a href="<?php the_permalink(); ?>" style="color: var(--color-neutral-900);">
-                                <?php the_title(); ?>
-                            </a>
-                        </h3>
-
-                        <p class="card-text"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
-
-                        <a href="<?php the_permalink(); ?>" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem; font-weight: 600; font-size: 0.875rem; color: var(--color-primary-700);">
-                            Read more <?php echo fieldcraft_icon('arrow-right', 16); ?>
-                        </a>
-                    </article>
-                <?php endwhile; ?>
-            </div>
-
-            <?php the_posts_pagination(); ?>
-
-        <?php else : ?>
-            <div style="text-align: center; padding: 4rem 0;">
-                <h2 class="text-display">Nothing Found</h2>
-                <p style="color: var(--color-neutral-600); margin: 1rem 0 2rem;">We couldn't find what you're looking for.</p>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Back to Home</a>
-            </div>
-        <?php endif; ?>
+<?php if (have_posts()): ?>
+    <div class="articles-section">
+        <?php while (have_posts()):
+            the_post(); ?>
+            <article class="article-row fade-in">
+                <a href="<?php the_permalink(); ?>">
+                    <?php
+                    $category = get_the_category();
+                    $cat_name = !empty($category)
+                        ? strtoupper($category[0]->name)
+                        : "NEWS";
+                    $read_time = ballstreet_get_read_time(get_the_content());
+                    ?>
+                    <span class="article-category"><?php echo esc_html(
+                        $cat_name,
+                    ); ?></span>
+                    <h3 class="article-title"><?php the_title(); ?></h3>
+                    <span class="article-time"><?php echo esc_html(
+                        $read_time,
+                    ); ?> min read</span>
+                </a>
+            </article>
+        <?php
+        endwhile; ?>
     </div>
-</section>
+
+    <nav class="pagination">
+        <?php the_posts_pagination([
+            "mid_size" => 2,
+            "prev_text" => "← Previous",
+            "next_text" => "Next →",
+        ]); ?>
+    </nav>
+
+<?php else: ?>
+    <div class="empty-state fade-in">
+        <div class="empty-state-icon">📭</div>
+        <h2 class="empty-state-title">Nothing Found</h2>
+        <p class="empty-state-text">We couldn't find what you're looking for.</p>
+        <a href="<?php echo esc_url(
+            home_url("/"),
+        ); ?>" class="btn btn-primary" style="margin-top: 20px;">Back to Home</a>
+    </div>
+<?php endif; ?>
 
 <?php get_footer(); ?>

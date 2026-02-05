@@ -1,0 +1,113 @@
+/*
+ * Ball Street Sports Journal
+ * Ticker Bar Component
+ */
+
+/* ========================================
+   TICKER BAR
+   ======================================== */
+
+.ticker-bar {
+    background: var(--ticker-bg);
+    background-size: 200% 100%;
+    animation: gradientShift 8s ease infinite;
+    padding: 10px 0;
+    overflow: hidden;
+    position: relative;
+    z-index: var(--z-ticker);
+}
+
+/* ========================================
+   TICKER WRAPPER
+   ======================================== */
+
+.ticker-wrapper {
+    display: flex;
+    width: max-content;
+    animation: ticker 45s linear infinite;
+}
+
+.ticker-wrapper:hover {
+    animation-play-state: paused;
+}
+
+/* ========================================
+   TICKER ITEM
+   ======================================== */
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 32px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ticker-text);
+    white-space: nowrap;
+    border-right: 1px solid var(--ticker-border);
+}
+
+.ticker-item:last-child {
+    border-right: none;
+}
+
+/* ========================================
+   TICKER ELEMENTS
+   ======================================== */
+
+.ticker-type {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--ticker-type-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ticker-name {
+    font-weight: 500;
+}
+
+.ticker-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+.ticker-change {
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+
+.ticker-change.up {
+    color: var(--ticker-up);
+}
+
+.ticker-change.down {
+    color: var(--ticker-down);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .ticker-bar {
+        padding: 8px 0;
+    }
+
+    .ticker-item {
+        padding: 0 20px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .ticker-type {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+
+    .ticker-change {
+        font-size: 10px;
+    }
+}

@@ -1,0 +1,116 @@
+/*
+ * Ball Street Sports Journal
+ * Front Page Specific Styles
+ */
+
+/* ========================================
+   FRONT PAGE LAYOUT
+   ======================================== */
+
+.is-front-page .main {
+    padding-top: 40px;
+}
+
+/* ========================================
+   CATEGORY SECTION COLORS
+   ======================================== */
+
+/* NIL category styling */
+.category-nil .article-category,
+.category-nil .sidebar-badge {
+    color: var(--accent-green);
+}
+
+/* Contracts category styling */
+.category-contracts .article-category,
+.category-contracts .sidebar-badge {
+    color: var(--accent-blue);
+}
+
+/* Betting category styling */
+.category-betting .article-category,
+.category-betting .sidebar-badge {
+    color: var(--accent-orange);
+}
+
+/* Business category styling */
+.category-business .article-category {
+    color: var(--text-secondary);
+}
+
+/* Trade category styling */
+.category-trade .article-category {
+    color: var(--accent-orange);
+}
+
+/* ========================================
+   FRONT PAGE SECTIONS
+   ======================================== */
+
+.front-section {
+    margin-bottom: var(--section-gap);
+}
+
+.front-section:last-child {
+    margin-bottom: 0;
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+.loading-skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-card) 25%,
+        var(--bg-elevated) 50%,
+        var(--bg-card) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-lg);
+}
+
+.loading-text {
+    height: 16px;
+    margin-bottom: 8px;
+}
+
+.loading-title {
+    height: 24px;
+    width: 80%;
+    margin-bottom: 12px;
+}
+
+.loading-image {
+    aspect-ratio: 16 / 10;
+}
+
+/* ========================================
+   EMPTY STATES
+   ======================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.empty-state-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state-text {
+    font-size: 14px;
+    color: var(--text-muted);
+}
