@@ -230,12 +230,12 @@
 }
 
 .athletes-table th .sort-btn.sort-asc::after {
-    content: '↑';
+    content: "↑";
     color: var(--accent-green);
 }
 
 .athletes-table th .sort-btn.sort-desc::after {
-    content: '↓';
+    content: "↓";
     color: var(--accent-green);
 }
 
@@ -359,14 +359,15 @@ tr[data-rank="3"] .athlete-rank {
     min-width: 0;
 }
 
-.athlete-name {
+.athletes-table .athlete-name {
+    font-family: var(--font-body);
     font-weight: 600;
     font-size: 15px;
     color: var(--text-primary);
     transition: color var(--transition-fast);
 }
 
-.athlete-player:hover .athlete-name {
+.athletes-table .athlete-player:hover .athlete-name {
     color: var(--accent-green);
 }
 
