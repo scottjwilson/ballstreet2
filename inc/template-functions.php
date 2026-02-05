@@ -885,60 +885,69 @@ function ballstreet_render_athlete_rows(int $count = 5): void
 {
     $args = [
         "post_type" => "athlete",
-        "posts_per_page" => $count,
+        "posts_per_page" => -1, // Get all to sort properly
         "post_status" => "publish",
-        "meta_query" => [
-            "relation" => "OR",
-            "nil_clause" => [
-                "key" => "nil_valuation",
-                "compare" => "EXISTS",
-            ],
-            "val_clause" => [
-                "key" => "valuation",
-                "compare" => "EXISTS",
-            ],
-        ],
-        "orderby" => [
-            "nil_clause" => "DESC",
-            "val_clause" => "DESC",
-        ],
     ];
 
     $query = new WP_Query($args);
+
+    // Sort athletes by NIL value
+    $athletes = $query->posts;
+    usort($athletes, function ($a, $b) {
+        $nil_a =
+            get_field("nil_valuation", $a->ID) ?:
+            get_field("valuation", $a->ID) ?:
+            0;
+        $nil_b =
+            get_field("nil_valuation", $b->ID) ?:
+            get_field("valuation", $b->ID) ?:
+            0;
+        return floatval($nil_b) - floatval($nil_a);
+    });
+
+    // Limit to requested count
+    $athletes = array_slice($athletes, 0, $count);
     $rank = 1;
 
-    if ($query->have_posts()):
-        while ($query->have_posts()):
+    if (!empty($athletes)):
+        foreach ($athletes as $athlete):
 
-            $query->the_post();
-            $athlete_id = get_the_ID();
+            $athlete_id = $athlete->ID;
             $fields = ballstreet_get_athlete_fields($athlete_id);
             $nil_value = $fields["nil_valuation"];
             $formatted_nil = ballstreet_format_value($nil_value);
             $position = $fields["position"];
             $school = $fields["school_name"];
-            $has_thumbnail = has_post_thumbnail();
+            $has_thumbnail = has_post_thumbnail($athlete_id);
             ?>
             <article class="athlete-row <?php echo $has_thumbnail
                 ? "has-thumbnail"
                 : ""; ?> fade-in">
-                <a href="<?php the_permalink(); ?>" class="athlete-row-link">
+                <a href="<?php echo get_permalink(
+                    $athlete_id,
+                ); ?>" class="athlete-row-link">
                     <div class="athlete-row-rank">
                         <span class="rank-number">#<?php echo $rank; ?></span>
                     </div>
                     <div class="athlete-row-avatar">
                         <?php if ($has_thumbnail): ?>
-                            <?php the_post_thumbnail("thumbnail", [
-                                "class" => "athlete-row-photo",
-                            ]); ?>
+                            <?php echo get_the_post_thumbnail(
+                                $athlete_id,
+                                "thumbnail",
+                                [
+                                    "class" => "athlete-row-photo",
+                                ],
+                            ); ?>
                         <?php else: ?>
                             <span class="athlete-row-initials"><?php echo esc_html(
-                                substr(get_the_title(), 0, 2),
+                                substr(get_the_title($athlete_id), 0, 2),
                             ); ?></span>
                         <?php endif; ?>
                     </div>
                     <div class="athlete-row-info">
-                        <h3 class="athlete-row-name"><?php the_title(); ?></h3>
+                        <h3 class="athlete-row-name"><?php echo get_the_title(
+                            $athlete_id,
+                        ); ?></h3>
                         <div class="athlete-row-meta">
                             <?php if ($position): ?>
                                 <span class="athlete-row-position"><?php echo esc_html(
@@ -969,9 +978,7 @@ function ballstreet_render_athlete_rows(int $count = 5): void
                 </a>
             </article>
             <?php $rank++;
-        endwhile;
-        wp_reset_postdata();
-        // Placeholder when no athletes exist
+        endforeach;
     else:
          ?>
         <div class="athletes-empty">
