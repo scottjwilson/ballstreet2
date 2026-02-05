@@ -52,48 +52,7 @@
             ); ?>" class="nav-cta">Subscribe</a>
         </nav>
 
-        <!-- Mobile Menu Toggle -->
-        <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
-            <span class="icon-menu"><?php echo ballstreet_icon(
-                "menu",
-                24,
-            ); ?></span>
-            <span class="icon-close"><?php echo ballstreet_icon(
-                "close",
-                24,
-            ); ?></span>
-        </button>
     </div>
 </header>
-
-<!-- Mobile Navigation Overlay -->
-<div class="nav-overlay"></div>
-
-<!-- Mobile Navigation -->
-<nav class="nav-mobile">
-    <a href="<?php echo esc_url(
-        home_url("/news"),
-    ); ?>" class="nav-link">News</a>
-    <a href="<?php echo esc_url(
-        home_url("/deals"),
-    ); ?>" class="nav-link">Deals</a>
-    <a href="<?php echo esc_url(
-        home_url("/athletes"),
-    ); ?>" class="nav-link">Athletes</a>
-
-    <!-- Theme Toggle (Mobile) -->
-    <button class="theme-toggle theme-toggle-mobile" type="button" aria-label="Switch to light mode">
-        <span class="icon-sun"><?php echo ballstreet_icon("sun", 20); ?></span>
-        <span class="icon-moon"><?php echo ballstreet_icon(
-            "moon",
-            20,
-        ); ?></span>
-        <span class="theme-toggle-label">Toggle Theme</span>
-    </button>
-
-    <a href="<?php echo esc_url(
-        home_url("/subscribe"),
-    ); ?>" class="nav-cta">Subscribe</a>
-</nav>
 
 <main class="main">

@@ -150,67 +150,6 @@ import "../css/single.css";
   }
 
   // ========================================
-  // MOBILE MENU
-  // ========================================
-
-  function initMobileMenu() {
-    const toggle = document.querySelector(".menu-toggle");
-    const nav = document.querySelector(".nav-mobile");
-    const overlay = document.querySelector(".nav-overlay");
-
-    if (!toggle || !nav) return;
-
-    const navLinks = nav.querySelectorAll("a");
-
-    function closeMenu() {
-      toggle.classList.remove("is-active");
-      nav.classList.remove("is-open");
-      if (overlay) overlay.classList.remove("is-visible");
-      document.body.classList.remove("menu-open");
-      toggle.setAttribute("aria-expanded", "false");
-    }
-
-    function openMenu() {
-      toggle.classList.add("is-active");
-      nav.classList.add("is-open");
-      if (overlay) overlay.classList.add("is-visible");
-      document.body.classList.add("menu-open");
-      toggle.setAttribute("aria-expanded", "true");
-    }
-
-    function toggleMenu() {
-      const isOpen = nav.classList.contains("is-open");
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    }
-
-    toggle.addEventListener("click", toggleMenu);
-
-    if (overlay) {
-      overlay.addEventListener("click", closeMenu);
-    }
-
-    navLinks.forEach(function (link) {
-      link.addEventListener("click", closeMenu);
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && nav.classList.contains("is-open")) {
-        closeMenu();
-      }
-    });
-
-    window.addEventListener("resize", function () {
-      if (window.innerWidth >= 768 && nav.classList.contains("is-open")) {
-        closeMenu();
-      }
-    });
-  }
-
-  // ========================================
   // FADE IN ANIMATIONS
   // ========================================
 
@@ -593,7 +532,6 @@ import "../css/single.css";
     initThemeToggle();
     initTicker();
     initHeader();
-    initMobileMenu();
     initFadeAnimations();
     initCategoryTabs();
     initNewsletter();

@@ -175,94 +175,17 @@
 }
 
 /* ========================================
-   MOBILE MENU TOGGLE
+   MOBILE MENU TOGGLE (hidden - not needed)
    ======================================== */
 
 .menu-toggle {
     display: none;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    color: var(--text-primary);
-    cursor: pointer;
 }
 
-.menu-toggle svg {
-    width: 24px;
-    height: 24px;
-}
-
-.menu-toggle .icon-close {
-    display: none;
-}
-
-.menu-toggle.is-active .icon-menu {
-    display: none;
-}
-
-.menu-toggle.is-active .icon-close {
-    display: block;
-}
-
-/* ========================================
-   MOBILE NAVIGATION
-   ======================================== */
-
-.nav-mobile {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 100%;
-    max-width: 320px;
-    height: 100vh;
-    background: var(--bg-secondary);
-    border-left: 1px solid var(--border-color);
-    z-index: var(--z-overlay);
-    padding: 80px 24px 24px;
-    transition: right var(--transition-base);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.nav-mobile.is-open {
-    right: 0;
-}
-
-.nav-mobile .nav-link {
-    display: block;
-    padding: 16px 0;
-    font-size: 18px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.nav-mobile .nav-link::after {
-    display: none;
-}
-
-.nav-mobile .nav-cta {
-    margin-top: 16px;
-    text-align: center;
-    padding: 14px 20px;
-}
-
-/* Mobile overlay */
+/* Mobile nav elements - hidden, not used */
+.nav-mobile,
 .nav-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: calc(var(--z-overlay) - 1);
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity var(--transition-base),
-        visibility var(--transition-base);
-}
-
-.nav-overlay.is-visible {
-    opacity: 1;
-    visibility: visible;
+    display: none;
 }
 
 /* ========================================
@@ -271,34 +194,77 @@
 
 @media (max-width: 1024px) {
     .nav {
-        gap: 24px;
+        gap: 20px;
     }
 }
 
 @media (max-width: 768px) {
     .header-inner {
-        height: 64px;
+        height: 60px;
     }
 
     .logo-mark {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .logo-text {
-        font-size: 9px;
+        font-size: 8px;
         letter-spacing: 2px;
     }
 
     .nav {
+        gap: 12px;
+    }
+
+    .nav-link {
+        font-size: 12px;
+    }
+
+    .nav-cta {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .theme-toggle {
+        width: 32px;
+        height: 32px;
+    }
+
+    .theme-toggle svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-inner {
+        height: 56px;
+        padding: 0 16px;
+    }
+
+    .logo-mark {
+        font-size: 20px;
+    }
+
+    .logo-text {
         display: none;
     }
 
-    .menu-toggle {
-        display: flex;
+    .nav {
+        gap: 8px;
     }
 
-    /* Hide desktop theme toggle, show mobile version in nav-mobile */
-    .nav .theme-toggle {
-        display: none;
+    .nav-link {
+        font-size: 11px;
+    }
+
+    .nav-cta {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    .theme-toggle {
+        width: 28px;
+        height: 28px;
     }
 }
