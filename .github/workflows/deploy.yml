@@ -1,4 +1,4 @@
-name: Publish Website
+name: Deploy Website
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - main
 
 jobs:
-  web-deploy:
-    name: 🚀 Deploy Website Every Commit
+  deploy:
+    name: 🚀 Build and Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Get Latest Code
-        uses: actions/checkout@v3
+      - name: 🚚 Checkout
+        uses: actions/checkout@v4
 
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
@@ -28,12 +28,22 @@ jobs:
       - name: 📋 List dist folder
         run: ls -la dist/
 
-      - name: 📂 Sync Files
-        uses: SamKirkland/web-deploy@v1
-        with:
-          target-server: ballstreetsportsjournal.com
-          remote-user: ballstreetsportsjournalcom
-          private-ssh-key: ${{ secrets.SSH_KEY }}
-          destination-path: /home/ballstreetsportsjournalcom/public_html/wp-content/themes/ballstreet2/
-          ssh-port: 6543
-          rsync-options: --archive --verbose --compress --delete --exclude=node_modules --exclude=.git --exclude=.github --exclude=src
+      - name: 🔑 Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 6543 ballstreetsportsjournal.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: 🧪 Test SSH Connection
+        run: |
+          ssh -v -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no -o ConnectTimeout=10 ballstreetsportsjournalcom@ballstreetsportsjournal.com "echo 'SSH connection successful'"
+
+      - name: 📂 Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.github \
+            -e "ssh -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no" \
+            ./ ballstreetsportsjournalcom@ballstreetsportsjournal.com:/home/ballstreetsportsjournalcom/public_html/wp-content/themes/ballstreet2/
