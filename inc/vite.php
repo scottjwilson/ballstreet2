@@ -113,12 +113,6 @@ add_action("wp_head", "ballstreet_output_vite_scripts", 1);
  */
 function ballstreet_load_vite_production_assets(): void
 {
-    $vite = ballstreet_detect_vite_server();
-
-    if ($vite["running"]) {
-        return;
-    }
-
     $manifest_path = get_theme_file_path("dist/.vite/manifest.json");
 
     if (!file_exists($manifest_path)) {

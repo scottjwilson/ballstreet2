@@ -1,277 +1,228 @@
-/* Single Deal Page Styles */
+/* Single Deal Page */
 
-.single-deal {
-    max-width: 900px;
+.single-deal-page {
+    max-width: 800px;
     margin: 0 auto;
-    padding: 3rem 1.5rem 4rem;
+    padding: 2rem 1rem 4rem;
 }
 
-/* Deal Header */
-.deal-header {
-    margin-bottom: 2.5rem;
+.deal-article {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+.deal-page-header {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
-.deal-header-top {
+.deal-badges {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
-.deal-type-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.375rem 0.875rem;
-    border-radius: 9999px;
+.deal-badge {
+    display: inline-block;
+    padding: 0.375rem 1rem;
+    border-radius: 100px;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.deal-type-badge.nil {
+.deal-badge.nil {
     background: rgba(16, 185, 129, 0.15);
     color: var(--accent-green);
 }
 
-.deal-type-badge.contract {
+.deal-badge.contract {
     background: rgba(59, 130, 246, 0.15);
     color: var(--accent-blue);
 }
 
-.deal-type-badge.trade {
+.deal-badge.trade {
     background: rgba(245, 158, 11, 0.15);
     color: var(--accent-orange);
 }
 
-.deal-type-badge.extension {
+.deal-badge.extension {
     background: rgba(168, 85, 247, 0.15);
     color: #a855f7;
 }
 
-.deal-trend-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
+.deal-trend {
     font-family: var(--font-mono);
     font-size: 0.875rem;
     font-weight: 500;
 }
 
-.deal-trend-badge.up {
+.deal-trend.up {
     color: var(--accent-green);
 }
 
-.deal-trend-badge.down {
+.deal-trend.down {
     color: var(--accent-red);
 }
 
-/* Deal Header Main - Avatar + Name */
-.deal-header-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.deal-athlete-avatar {
-    width: 96px;
-    height: 96px;
+.deal-avatar {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     overflow: hidden;
-    flex-shrink: 0;
-    background: var(--bg-card);
     border: 3px solid var(--border-color);
+    background: var(--bg-card);
 }
 
-.deal-athlete-avatar img {
+.deal-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.deal-athlete-avatar.deal-athlete-initials {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-style: italic;
-    color: var(--text-secondary);
-}
-
-.deal-header-info {
-    text-align: center;
-}
-
-.deal-athlete-name {
+.deal-name {
     font-family: var(--font-display);
     font-size: 2.5rem;
-    font-weight: 400;
     font-style: italic;
     color: var(--text-primary);
-    margin: 0 0 0.5rem;
+    margin: 0;
     line-height: 1.2;
 }
 
-.deal-athlete-meta {
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
+.deal-meta {
+    font-size: 1rem;
     color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    margin: 0;
 }
 
-.deal-athlete-meta .sep {
-    color: var(--text-muted);
-}
-
-/* Deal Value Display */
-.deal-value-display {
-    background: linear-gradient(
-        135deg,
-        var(--bg-card) 0%,
-        var(--bg-elevated) 100%
-    );
+.deal-value-box {
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 2.5rem 3rem;
+    padding: 2rem 3rem;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
 }
 
-.deal-value-amount {
+.deal-value {
+    display: block;
     font-family: var(--font-display);
-    font-size: 4rem;
-    font-weight: 400;
+    font-size: 3.5rem;
     font-style: italic;
     color: var(--accent-green);
     line-height: 1;
 }
 
 .deal-value-label {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     color: var(--text-muted);
+    margin-top: 0.5rem;
 }
 
-/* Deal Stats Grid */
-.deal-stats {
+/* Stats Grid */
+.deal-stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
-    margin-bottom: 2rem;
 }
 
-.deal-stat {
+.deal-stat-item {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 1.25rem;
     text-align: center;
 }
 
-.deal-stat-value {
+.stat-value {
+    display: block;
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-style: italic;
     color: var(--text-primary);
-    margin-bottom: 0.25rem;
 }
 
-.deal-stat-label {
+.stat-label {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--text-muted);
+    margin-top: 0.25rem;
 }
 
-/* Section Title */
-.deal-section-title {
+/* Details Box */
+.deal-details-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.deal-details-box h2 {
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-style: italic;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    margin: 0 0 0.75rem;
 }
 
-/* Deal Details Section */
-.deal-details {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
-}
-
-.deal-details .deal-section-title {
-    margin-bottom: 0.75rem;
-}
-
-.deal-details-text {
-    font-family: var(--font-body);
+.deal-details-box p {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-secondary);
+    margin: 0;
 }
 
-/* Deal Content (from editor) */
-.deal-content {
-    margin-bottom: 2.5rem;
+/* Content Box */
+.deal-content-box {
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
+}
+
+.deal-content-box h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
 }
 
 .deal-content-text {
-    font-family: var(--font-body);
-    font-size: 1.0625rem;
+    font-size: 1rem;
     line-height: 1.8;
     color: var(--text-secondary);
 }
 
 .deal-content-text p {
-    margin-bottom: 1.25rem;
+    margin: 0 0 1rem;
 }
 
-.deal-content-text p:last-child {
-    margin-bottom: 0;
-}
-
-.deal-content-text a {
-    color: var(--accent-green);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-}
-
-.deal-content-text a:hover {
-    text-decoration: none;
-}
-
-/* Deal Tags */
-.deal-tags-section {
-    margin-bottom: 2.5rem;
-}
-
-.deal-tags {
+/* Tags */
+.deal-tags-box {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.deal-tag {
-    display: inline-flex;
-    align-items: center;
+.deal-tag-item {
+    display: inline-block;
     padding: 0.375rem 0.75rem;
     background: var(--bg-elevated);
     border: 1px solid var(--border-color);
@@ -279,223 +230,105 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--text-secondary);
-    transition: all 0.2s ease;
 }
 
-.deal-tag:hover {
-    background: var(--bg-card);
-    border-color: var(--accent-green);
-    color: var(--accent-green);
+/* Athlete Card */
+.deal-athlete-box {
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
 }
 
-/* Linked Athlete Section */
-.deal-athlete-section {
-    margin-bottom: 2.5rem;
+.deal-athlete-box h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
 }
 
-.deal-athlete-card {
+.athlete-link-card {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1rem;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.deal-athlete-card:hover {
+.athlete-link-card:hover {
     border-color: var(--accent-green);
     background: var(--bg-elevated);
 }
 
-.deal-athlete-card-avatar {
-    width: 80px;
-    height: 80px;
+.athlete-card-img {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: var(--bg-elevated);
-    border: 2px solid var(--border-color);
-}
-
-.deal-athlete-card-avatar img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
-.deal-athlete-card-info {
+.athlete-card-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
-.deal-athlete-card-name {
+.athlete-card-name {
     font-family: var(--font-display);
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-style: italic;
     color: var(--text-primary);
-    margin: 0 0 0.25rem;
 }
 
-.deal-athlete-card-meta {
-    font-family: var(--font-body);
+.athlete-card-meta {
     font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin: 0;
+    color: var(--text-muted);
 }
 
-.deal-athlete-card-arrow {
+.athlete-card-arrow {
     font-size: 1.5rem;
     color: var(--text-muted);
     transition: all 0.2s ease;
 }
 
-.deal-athlete-card:hover .deal-athlete-card-arrow {
+.athlete-link-card:hover .athlete-card-arrow {
     color: var(--accent-green);
     transform: translateX(4px);
 }
 
-/* Related Deals Section */
-.deal-related {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.deal-related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-}
-
-.deal-related-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 1.25rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.deal-related-card:hover {
-    border-color: var(--accent-green);
-    transform: translateY(-2px);
-}
-
-.deal-related-card.nil {
-    border-top: 3px solid var(--accent-green);
-}
-
-.deal-related-card.contract {
-    border-top: 3px solid var(--accent-blue);
-}
-
-.deal-related-card.trade {
-    border-top: 3px solid var(--accent-orange);
-}
-
-.deal-related-card.extension {
-    border-top: 3px solid #a855f7;
-}
-
-.deal-related-type {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.deal-related-type.nil {
-    color: var(--accent-green);
-}
-
-.deal-related-type.contract {
-    color: var(--accent-blue);
-}
-
-.deal-related-type.trade {
-    color: var(--accent-orange);
-}
-
-.deal-related-type.extension {
-    color: #a855f7;
-}
-
-.deal-related-name {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
-    font-style: italic;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-.deal-related-value {
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--accent-green);
-}
-
 /* Responsive */
-@media (max-width: 768px) {
-    .single-deal {
-        padding: 2rem 1rem 3rem;
+@media (max-width: 600px) {
+    .single-deal-page {
+        padding: 1.5rem 1rem 3rem;
     }
 
-    .deal-header-main {
-        flex-direction: column;
-        text-align: center;
+    .deal-name {
+        font-size: 2rem;
     }
 
-    .deal-athlete-meta {
-        justify-content: center;
-    }
-
-    .deal-athlete-name {
-        font-size: 1.75rem;
-    }
-
-    .deal-value-amount {
+    .deal-value {
         font-size: 2.5rem;
     }
 
-    .deal-stats {
-        grid-template-columns: repeat(2, 1fr);
+    .deal-value-box {
+        padding: 1.5rem;
     }
 
-    .deal-athlete-card {
+    .deal-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .athlete-link-card {
         flex-direction: column;
         text-align: center;
     }
 
-    .deal-athlete-card-arrow {
+    .athlete-card-arrow {
         display: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .deal-header-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .deal-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .deal-value-display {
-        padding: 1.5rem;
-    }
-
-    .deal-details {
-        padding: 1.25rem;
-    }
-
-    .deal-related-grid {
-        grid-template-columns: 1fr;
     }
 }
