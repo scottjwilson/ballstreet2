@@ -119,7 +119,7 @@ function ballstreet_load_vite_production_assets(): void
         return;
     }
 
-    $manifest_path = get_theme_file_path("dist/manifest.json");
+    $manifest_path = get_theme_file_path("dist/.vite/manifest.json");
 
     if (!file_exists($manifest_path)) {
         return;
