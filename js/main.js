@@ -19,6 +19,8 @@ import "../css/newsletter.css";
 import "../css/front-page.css";
 import "../css/athletes-table.css";
 import "../css/single-athlete.css";
+import "../css/archive.css";
+import "../css/single.css";
 
 (function () {
   "use strict";
