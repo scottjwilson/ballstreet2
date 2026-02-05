@@ -211,51 +211,29 @@ function ballstreet_get_ticker_items(): array
         }
     }
 
-    // Fallback to static ticker items
-    return [
-        [
-            "type" => "CONTRACT",
-            "name" => "Patrick Mahomes",
-            "value" => '$450M',
-            "change" => "12",
-            "direction" => "up",
-        ],
-        [
-            "type" => "NIL",
-            "name" => "Caitlin Clark",
-            "value" => '$28M',
-            "change" => "340",
-            "direction" => "up",
-        ],
-        [
-            "type" => "CONTRACT",
-            "name" => "Shohei Ohtani",
-            "value" => '$700M',
-            "change" => "8",
-            "direction" => "up",
-        ],
-        [
-            "type" => "NIL",
-            "name" => "Travis Hunter",
-            "value" => '$4.8M',
-            "change" => "89",
-            "direction" => "up",
-        ],
-        [
-            "type" => "CONTRACT",
-            "name" => "Jaylen Brown",
-            "value" => '$304M',
-            "change" => "5",
-            "direction" => "up",
-        ],
-        [
-            "type" => "NIL",
-            "name" => "Angel Reese",
-            "value" => '$1.8M',
-            "change" => "156",
-            "direction" => "up",
-        ],
-    ];
+    // Fallback to static ticker items from dummy deals
+    $dummy_deals = ballstreet_get_dummy_deals();
+    $ticker_items = [];
+
+    foreach ($dummy_deals as $deal) {
+        // Convert deal type to short ticker format
+        $type_map = [
+            "NIL DEAL" => "NIL",
+            "CONTRACT" => "CONTRACT",
+            "TRADE" => "TRADE",
+            "EXTENSION" => "EXT",
+        ];
+
+        $ticker_items[] = [
+            "type" => $type_map[$deal["type"]] ?? $deal["type"],
+            "name" => $deal["player"],
+            "value" => $deal["amount"],
+            "change" => str_replace("%", "", $deal["trend_value"]),
+            "direction" => $deal["trend"],
+        ];
+    }
+
+    return $ticker_items;
 }
 
 /**
@@ -419,66 +397,64 @@ function ballstreet_render_deals_grid(
     }
 
     $deals_query = new WP_Query($args);
-
-    // Fallback to static content if no deals found
-    if (!$deals_query->have_posts()) {
-        ballstreet_render_deals_grid_static($count);
-        return;
-    }
-
+    $rendered_count = 0;
     $delay = 3;
-    while ($deals_query->have_posts()):
 
-        $deals_query->the_post();
-        $deal_id = get_the_ID();
+    // Render CPT deals if we have any
+    if ($deals_query->have_posts()) {
+        while ($deals_query->have_posts()):
 
-        // Get deal fields
-        $deal_value = get_field("deal_value", $deal_id) ?: 0;
-        $deal_trend = get_field("deal_trend", $deal_id) ?: "up";
-        $deal_trend_percent = get_field("deal_trend_percent", $deal_id) ?: "";
-        $deal_details = get_field("deal_details", $deal_id) ?: "";
-        $deal_tags_raw = get_field("deal_tags", $deal_id) ?: "";
+            $deals_query->the_post();
+            $deal_id = get_the_ID();
 
-        // Get deal type from taxonomy
-        $deal_types = get_the_terms($deal_id, "deal_type");
-        $deal_type = !empty($deal_types) ? $deal_types[0]->name : "Deal";
-        $deal_type_class = ballstreet_get_deal_class($deal_type);
+            // Get deal fields
+            $deal_value = get_field("deal_value", $deal_id) ?: 0;
+            $deal_trend = get_field("deal_trend", $deal_id) ?: "up";
+            $deal_trend_percent =
+                get_field("deal_trend_percent", $deal_id) ?: "";
+            $deal_details = get_field("deal_details", $deal_id) ?: "";
+            $deal_tags_raw = get_field("deal_tags", $deal_id) ?: "";
 
-        // Get linked athlete
-        $athlete = get_field("deal_athlete", $deal_id);
-        $player_name = "";
-        if ($athlete) {
-            // Handle different ACF return formats
-            if (is_array($athlete)) {
-                // If it's an array of post objects (relationship field returns array)
-                $first_athlete = reset($athlete);
-                if (is_object($first_athlete)) {
-                    $player_name = $first_athlete->post_title;
-                } elseif (is_numeric($first_athlete)) {
-                    $player_name = get_the_title($first_athlete);
+            // Get deal type from taxonomy
+            $deal_types = get_the_terms($deal_id, "deal_type");
+            $deal_type = !empty($deal_types) ? $deal_types[0]->name : "Deal";
+            $deal_type_class = ballstreet_get_deal_class($deal_type);
+
+            // Get linked athlete
+            $athlete = get_field("deal_athlete", $deal_id);
+            $player_name = "";
+            if ($athlete) {
+                // Handle different ACF return formats
+                if (is_array($athlete)) {
+                    // If it's an array of post objects (relationship field returns array)
+                    $first_athlete = reset($athlete);
+                    if (is_object($first_athlete)) {
+                        $player_name = $first_athlete->post_title;
+                    } elseif (is_numeric($first_athlete)) {
+                        $player_name = get_the_title($first_athlete);
+                    }
+                } elseif (is_object($athlete)) {
+                    // Single post object
+                    $player_name = $athlete->post_title;
+                } elseif (is_numeric($athlete)) {
+                    // Just the ID
+                    $player_name = get_the_title($athlete);
                 }
-            } elseif (is_object($athlete)) {
-                // Single post object
-                $player_name = $athlete->post_title;
-            } elseif (is_numeric($athlete)) {
-                // Just the ID
-                $player_name = get_the_title($athlete);
             }
-        }
 
-        // Fallback to deal title if no athlete name found
-        if (empty($player_name)) {
-            $player_name = get_the_title($deal_id);
-        }
+            // Fallback to deal title if no athlete name found
+            if (empty($player_name)) {
+                $player_name = get_the_title($deal_id);
+            }
 
-        // Parse tags (comma-separated text field)
-        $tags = [];
-        if ($deal_tags_raw) {
-            $tags = array_map("trim", explode(",", $deal_tags_raw));
-        }
+            // Parse tags (comma-separated text field)
+            $tags = [];
+            if ($deal_tags_raw) {
+                $tags = array_map("trim", explode(",", $deal_tags_raw));
+            }
 
-        $arrow = $deal_trend === "up" ? "↑" : "↓";
-        ?>
+            $arrow = $deal_trend === "up" ? "↑" : "↓";
+            ?>
         <article class="deal-card <?php echo esc_attr(
             $deal_type_class,
         ); ?> fade-in fade-in-delay-<?php echo $delay; ?>">
@@ -519,19 +495,40 @@ function ballstreet_render_deals_grid(
                 <?php endif; ?>
             </a>
         </article>
-        <?php $delay++;
-    endwhile;
-    wp_reset_postdata();
+        <?php
+        $delay++;
+        $rendered_count++;
+
+        endwhile;
+        wp_reset_postdata();
+    }
+
+    // Fill remaining slots with dummy data if needed
+    $remaining = $count - $rendered_count;
+    if ($remaining > 0) {
+        ballstreet_render_deals_grid_static($remaining, $delay);
+    }
 }
 
 /**
- * Render static deals grid (fallback when no Deal CPT entries exist)
+ * Get static/dummy deals data with mixed categories
  *
- * @param int $count Number of deals to show
+ * @return array Array of deal data
  */
-function ballstreet_render_deals_grid_static(int $count = 3): void
+function ballstreet_get_dummy_deals(): array
 {
-    $deals = [
+    return [
+        [
+            "type" => "CONTRACT",
+            "class" => "contract",
+            "player" => "Joe Burrow",
+            "amount" => '$275M',
+            "trend" => "up",
+            "trend_value" => "18%",
+            "details" =>
+                "5-year extension with Cincinnati Bengals, $219M guaranteed",
+            "tags" => ['$219M GTD', "5 Years", "Bengals"],
+        ],
         [
             "type" => "NIL DEAL",
             "class" => "nil",
@@ -544,17 +541,6 @@ function ballstreet_render_deals_grid_static(int $count = 3): void
             "tags" => ["Nike", "Gatorade", "Beats"],
         ],
         [
-            "type" => "CONTRACT",
-            "class" => "contract",
-            "player" => "Tyreek Hill",
-            "amount" => '$120M',
-            "trend" => "up",
-            "trend_value" => "12%",
-            "details" =>
-                '4-year extension with Miami Dolphins, $72.2M guaranteed',
-            "tags" => ['$72.2M GTD', "4 Years", "No-Trade"],
-        ],
-        [
             "type" => "TRADE",
             "class" => "trade",
             "player" => "Juan Soto",
@@ -564,9 +550,86 @@ function ballstreet_render_deals_grid_static(int $count = 3): void
             "details" => "Record-breaking 15-year deal with New York Mets",
             "tags" => ["15 Years", "Record", "Full NTC"],
         ],
+        [
+            "type" => "CONTRACT",
+            "class" => "contract",
+            "player" => "Lamar Jackson",
+            "amount" => '$260M',
+            "trend" => "up",
+            "trend_value" => "15%",
+            "details" => "5-year fully guaranteed deal with Baltimore Ravens",
+            "tags" => ["Fully GTD", "5 Years", "Ravens"],
+        ],
+        [
+            "type" => "EXTENSION",
+            "class" => "contract",
+            "player" => "Justin Jefferson",
+            "amount" => '$140M',
+            "trend" => "up",
+            "trend_value" => "22%",
+            "details" => "4-year extension, highest-paid non-QB in NFL history",
+            "tags" => ['$110M GTD', "4 Years", "Vikings"],
+        ],
+        [
+            "type" => "NIL DEAL",
+            "class" => "nil",
+            "player" => "Arch Manning",
+            "amount" => '$3.2M',
+            "trend" => "up",
+            "trend_value" => "156%",
+            "details" =>
+                "Texas QB lands deals with Panini, EA Sports, and TikTok",
+            "tags" => ["Panini", "EA Sports", "Texas"],
+        ],
+        [
+            "type" => "TRADE",
+            "class" => "trade",
+            "player" => "Davante Adams",
+            "amount" => '$140M',
+            "trend" => "down",
+            "trend_value" => "8%",
+            "details" => "Traded to Jets, restructured 5-year deal",
+            "tags" => ["Jets", "Restructured", "5 Years"],
+        ],
+        [
+            "type" => "CONTRACT",
+            "class" => "contract",
+            "player" => "CeeDee Lamb",
+            "amount" => '$136M',
+            "trend" => "up",
+            "trend_value" => "25%",
+            "details" => "4-year extension with Dallas Cowboys after holdout",
+            "tags" => ['$100M GTD', "4 Years", "Cowboys"],
+        ],
+        [
+            "type" => "NIL DEAL",
+            "class" => "nil",
+            "player" => "Caitlin Clark",
+            "amount" => '$28M',
+            "trend" => "up",
+            "trend_value" => "340%",
+            "details" =>
+                "Record NIL portfolio includes Nike, State Farm, Gatorade",
+            "tags" => ["Nike", "State Farm", "Indiana"],
+        ],
     ];
+}
 
-    $delay = 3;
+/**
+ * Render static deals grid (fallback or filler when not enough Deal CPT entries)
+ *
+ * @param int $count Number of deals to show
+ * @param int $delay Starting fade-in delay
+ */
+function ballstreet_render_deals_grid_static(
+    int $count = 3,
+    int $delay = 3,
+): void {
+    $deals = ballstreet_get_dummy_deals();
+
+    // Shuffle to get variety each load
+    shuffle($deals);
+
     foreach (array_slice($deals, 0, $count) as $deal):
         $arrow = $deal["trend"] === "up" ? "↑" : "↓"; ?>
         <article class="deal-card <?php echo esc_attr(
