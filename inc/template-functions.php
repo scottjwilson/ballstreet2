@@ -284,11 +284,144 @@ function ballstreet_render_sidebar_cards(int $count = 3): void
  * Render deals grid
  *
  * @param int $count Number of deals to show
+ * @param bool $featured_only Only show featured deals
  */
-function ballstreet_render_deals_grid(int $count = 3): void
+function ballstreet_render_deals_grid(
+    int $count = 3,
+    bool $featured_only = true,
+): void {
+    // Query Deal CPT
+    $args = [
+        "post_type" => "deal",
+        "posts_per_page" => $count,
+        "orderby" => "date",
+        "order" => "DESC",
+    ];
+
+    // If featured only, add meta query
+    if ($featured_only) {
+        $args["meta_query"] = [
+            [
+                "key" => "deal_featured",
+                "value" => "1",
+                "compare" => "=",
+            ],
+        ];
+    }
+
+    $deals_query = new WP_Query($args);
+
+    // Fallback to static content if no deals found
+    if (!$deals_query->have_posts()) {
+        ballstreet_render_deals_grid_static($count);
+        return;
+    }
+
+    $delay = 3;
+    while ($deals_query->have_posts()):
+
+        $deals_query->the_post();
+        $deal_id = get_the_ID();
+
+        // Get deal fields
+        $deal_value = get_field("deal_value", $deal_id) ?: 0;
+        $deal_trend = get_field("deal_trend", $deal_id) ?: "up";
+        $deal_trend_percent = get_field("deal_trend_percent", $deal_id) ?: "";
+        $deal_details = get_field("deal_details", $deal_id) ?: "";
+        $deal_tags_raw = get_field("deal_tags", $deal_id) ?: "";
+
+        // Get deal type from taxonomy
+        $deal_types = get_the_terms($deal_id, "deal_type");
+        $deal_type = !empty($deal_types) ? $deal_types[0]->name : "Deal";
+        $deal_type_class = ballstreet_get_deal_class($deal_type);
+
+        // Get linked athlete
+        $athlete = get_field("deal_athlete", $deal_id);
+        $player_name = "";
+        if ($athlete) {
+            // Handle different ACF return formats
+            if (is_array($athlete)) {
+                // If it's an array of post objects (relationship field returns array)
+                $first_athlete = reset($athlete);
+                if (is_object($first_athlete)) {
+                    $player_name = $first_athlete->post_title;
+                } elseif (is_numeric($first_athlete)) {
+                    $player_name = get_the_title($first_athlete);
+                }
+            } elseif (is_object($athlete)) {
+                // Single post object
+                $player_name = $athlete->post_title;
+            } elseif (is_numeric($athlete)) {
+                // Just the ID
+                $player_name = get_the_title($athlete);
+            }
+        }
+
+        // Fallback to deal title if no athlete name found
+        if (empty($player_name)) {
+            $player_name = get_the_title($deal_id);
+        }
+
+        // Parse tags (comma-separated text field)
+        $tags = [];
+        if ($deal_tags_raw) {
+            $tags = array_map("trim", explode(",", $deal_tags_raw));
+        }
+
+        $arrow = $deal_trend === "up" ? "↑" : "↓";
+        ?>
+        <article class="deal-card <?php echo esc_attr(
+            $deal_type_class,
+        ); ?> fade-in fade-in-delay-<?php echo $delay; ?>">
+            <a href="<?php the_permalink(); ?>" class="deal-card-link">
+                <div class="deal-header">
+                    <span class="deal-type <?php echo esc_attr(
+                        $deal_type_class,
+                    ); ?>"><?php echo esc_html(
+    strtoupper($deal_type),
+); ?></span>
+                    <?php if ($deal_trend_percent): ?>
+                        <span class="deal-trend <?php echo esc_attr(
+                            $deal_trend,
+                        ); ?>"><?php echo $arrow; ?> <?php echo esc_html(
+     $deal_trend_percent,
+ ); ?></span>
+                    <?php endif; ?>
+                </div>
+                <h3 class="deal-player"><?php echo esc_html(
+                    $player_name,
+                ); ?></h3>
+                <div class="deal-amount"><?php echo ballstreet_format_value(
+                    $deal_value,
+                ); ?></div>
+                <?php if ($deal_details): ?>
+                    <p class="deal-details"><?php echo esc_html(
+                        $deal_details,
+                    ); ?></p>
+                <?php endif; ?>
+                <?php if (!empty($tags)): ?>
+                    <div class="deal-tags">
+                        <?php foreach ($tags as $tag): ?>
+                            <span class="deal-tag"><?php echo esc_html(
+                                $tag,
+                            ); ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </a>
+        </article>
+        <?php $delay++;
+    endwhile;
+    wp_reset_postdata();
+}
+
+/**
+ * Render static deals grid (fallback when no Deal CPT entries exist)
+ *
+ * @param int $count Number of deals to show
+ */
+function ballstreet_render_deals_grid_static(int $count = 3): void
 {
-    // For now, render static demo content
-    // Will be replaced with Deal CPT query
     $deals = [
         [
             "type" => "NIL DEAL",

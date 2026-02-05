@@ -18,6 +18,7 @@ import "../css/articles.css";
 import "../css/newsletter.css";
 import "../css/front-page.css";
 import "../css/athletes-table.css";
+import "../css/single-athlete.css";
 
 (function () {
   "use strict";
@@ -347,6 +348,51 @@ import "../css/athletes-table.css";
   }
 
   // ========================================
+  // SHARE BUTTONS
+  // ========================================
+
+  function initShareButtons() {
+    const copyButtons = document.querySelectorAll(".copy-link");
+    if (!copyButtons.length) return;
+
+    copyButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const url = btn.dataset.url;
+        if (!url) return;
+
+        navigator.clipboard
+          .writeText(url)
+          .then(function () {
+            const originalText = btn.textContent;
+            btn.textContent = "Copied!";
+            btn.style.background = "var(--accent-green-dim)";
+            btn.style.color = "var(--accent-green)";
+
+            setTimeout(function () {
+              btn.textContent = originalText;
+              btn.style.background = "";
+              btn.style.color = "";
+            }, 2000);
+          })
+          .catch(function () {
+            // Fallback for older browsers
+            const textarea = document.createElement("textarea");
+            textarea.value = url;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+
+            btn.textContent = "Copied!";
+            setTimeout(function () {
+              btn.textContent = "Copy Link";
+            }, 2000);
+          });
+      });
+    });
+  }
+
+  // ========================================
   // ATHLETES TABLE
   // ========================================
 
@@ -552,6 +598,7 @@ import "../css/athletes-table.css";
     initSmoothScroll();
     initCardEffects();
     initAthletesTable();
+    initShareButtons();
   }
 
   if (document.readyState === "loading") {

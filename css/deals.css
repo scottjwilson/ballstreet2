@@ -36,6 +36,12 @@
     overflow: hidden;
 }
 
+.deal-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
 /* Top accent bar */
 .deal-card::before {
     content: "";
