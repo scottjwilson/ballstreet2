@@ -8,6 +8,7 @@
    ======================================== */
 
 .ticker-bar {
+    width: 100%;
     background: var(--ticker-bg);
     background-size: 200% 100%;
     animation: gradientShift 8s ease infinite;

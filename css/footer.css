@@ -8,6 +8,7 @@
    ======================================== */
 
 .footer {
+    width: 100%;
     border-top: 1px solid var(--border-color);
     padding: 48px var(--container-padding);
     background: var(--bg-primary);
