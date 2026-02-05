@@ -205,13 +205,31 @@ function ballstreet_get_ticker_items(): array
 
         wp_reset_postdata();
 
-        // Need at least 4 items for good ticker loop
-        if (count($ticker_items) >= 2) {
-            return $ticker_items;
+        // If we have some real deals, pad with dummy data to ensure enough items
+        $min_items = 8;
+        if (count($ticker_items) < $min_items) {
+            $dummy_items = ballstreet_get_ticker_dummy_items();
+            $needed = $min_items - count($ticker_items);
+            $ticker_items = array_merge(
+                $ticker_items,
+                array_slice($dummy_items, 0, $needed),
+            );
         }
+
+        return $ticker_items;
     }
 
     // Fallback to static ticker items from dummy deals
+    return ballstreet_get_ticker_dummy_items();
+}
+
+/**
+ * Get dummy ticker items from the dummy deals data
+ *
+ * @return array Array of ticker items
+ */
+function ballstreet_get_ticker_dummy_items(): array
+{
     $dummy_deals = ballstreet_get_dummy_deals();
     $ticker_items = [];
 
