@@ -78,8 +78,141 @@ function ballstreet_get_category_class(string $slug): string
  */
 function ballstreet_render_ticker(): void
 {
-    // Static ticker items for now - can be replaced with CPT query or ACF options
-    $ticker_items = [
+    $ticker_items = ballstreet_get_ticker_items();
+
+    // Render twice for seamless loop animation
+    for ($i = 0; $i < 2; $i++) {
+        foreach ($ticker_items as $item) {
+            $arrow = $item["direction"] === "up" ? "↑" : "↓"; ?>
+            <div class="ticker-item">
+                <span class="ticker-type"><?php echo esc_html(
+                    $item["type"],
+                ); ?></span>
+                <span class="ticker-name"><?php echo esc_html(
+                    $item["name"],
+                ); ?></span>
+                <span class="ticker-value"><?php echo esc_html(
+                    $item["value"],
+                ); ?></span>
+                <?php if (!empty($item["change"])): ?>
+                <span class="ticker-change <?php echo esc_attr(
+                    $item["direction"],
+                ); ?>"><?php echo $arrow; ?> <?php echo esc_html(
+     $item["change"],
+ ); ?>%</span>
+                <?php endif; ?>
+            </div>
+            <?php
+        }
+    }
+}
+
+/**
+ * Get ticker items from Deal CPT or fallback to static data
+ *
+ * @return array Array of ticker items
+ */
+function ballstreet_get_ticker_items(): array
+{
+    // First try to get featured deals
+    $args = [
+        "post_type" => "deal",
+        "posts_per_page" => 8,
+        "post_status" => "publish",
+        "meta_query" => [
+            [
+                "key" => "deal_featured",
+                "value" => "1",
+                "compare" => "=",
+            ],
+        ],
+        "orderby" => "date",
+        "order" => "DESC",
+    ];
+
+    $deals_query = new WP_Query($args);
+
+    // If no featured deals, get recent deals
+    if (!$deals_query->have_posts()) {
+        $args = [
+            "post_type" => "deal",
+            "posts_per_page" => 8,
+            "post_status" => "publish",
+            "orderby" => "date",
+            "order" => "DESC",
+        ];
+        $deals_query = new WP_Query($args);
+    }
+
+    // If we have deals, build ticker items from them
+    if ($deals_query->have_posts()) {
+        $ticker_items = [];
+
+        while ($deals_query->have_posts()) {
+            $deals_query->the_post();
+            $deal_id = get_the_ID();
+
+            // Get deal type
+            $deal_types = get_the_terms($deal_id, "deal_type");
+            $deal_type = !empty($deal_types) ? $deal_types[0]->name : "Deal";
+
+            // Shorten type name for ticker
+            $type_display = strtoupper(
+                str_replace(
+                    ["NIL Deal", "Contract", "Trade", "Extension"],
+                    ["NIL", "CONTRACT", "TRADE", "EXT"],
+                    $deal_type,
+                ),
+            );
+
+            // Get athlete/player name
+            $athlete = get_field("deal_athlete", $deal_id);
+            $player_name = "";
+
+            if ($athlete) {
+                if (is_array($athlete) && !empty($athlete[0])) {
+                    $athlete = $athlete[0];
+                }
+                if (is_object($athlete) && isset($athlete->ID)) {
+                    $player_name = get_the_title($athlete->ID);
+                } elseif (is_numeric($athlete)) {
+                    $player_name = get_the_title($athlete);
+                }
+            }
+
+            // Fallback to deal title
+            if (empty($player_name)) {
+                $player_name = get_the_title($deal_id);
+            }
+
+            // Get deal value and format it
+            $deal_value = get_field("deal_value", $deal_id) ?: 0;
+            $formatted_value = ballstreet_format_value($deal_value);
+
+            // Get trend info
+            $deal_trend = get_field("deal_trend", $deal_id) ?: "up";
+            $deal_trend_percent =
+                get_field("deal_trend_percent", $deal_id) ?: "";
+
+            $ticker_items[] = [
+                "type" => $type_display,
+                "name" => $player_name,
+                "value" => $formatted_value,
+                "change" => $deal_trend_percent,
+                "direction" => $deal_trend,
+            ];
+        }
+
+        wp_reset_postdata();
+
+        // Need at least 4 items for good ticker loop
+        if (count($ticker_items) >= 2) {
+            return $ticker_items;
+        }
+    }
+
+    // Fallback to static ticker items
+    return [
         [
             "type" => "CONTRACT",
             "name" => "Patrick Mahomes",
@@ -123,30 +256,6 @@ function ballstreet_render_ticker(): void
             "direction" => "up",
         ],
     ];
-
-    // Render twice for seamless loop
-    for ($i = 0; $i < 2; $i++) {
-        foreach ($ticker_items as $item) {
-            $arrow = $item["direction"] === "up" ? "↑" : "↓"; ?>
-            <div class="ticker-item">
-                <span class="ticker-type"><?php echo esc_html(
-                    $item["type"],
-                ); ?></span>
-                <span class="ticker-name"><?php echo esc_html(
-                    $item["name"],
-                ); ?></span>
-                <span class="ticker-value"><?php echo esc_html(
-                    $item["value"],
-                ); ?></span>
-                <span class="ticker-change <?php echo esc_attr(
-                    $item["direction"],
-                ); ?>"><?php echo $arrow; ?> <?php echo esc_html(
-     $item["change"],
- ); ?>%</span>
-            </div>
-            <?php
-        }
-    }
 }
 
 /**
