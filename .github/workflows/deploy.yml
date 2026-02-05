@@ -33,11 +33,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p 6543 ballstreetsportsjournal.com >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh-keyscan -p 6543 165.140.159.249 >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: 🧪 Test SSH Connection
         run: |
-          ssh -v -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no -o ConnectTimeout=10 ballstreetsportsjournalcom@ballstreetsportsjournal.com "echo 'SSH connection successful'"
+          ssh -v -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no -o ConnectTimeout=10 ballstreetsportsjournalcom@165.140.159.249 "echo 'SSH connection successful'"
 
       - name: 📂 Deploy via rsync
         run: |
@@ -46,4 +46,4 @@ jobs:
             --exclude=.git \
             --exclude=.github \
             -e "ssh -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no" \
-            ./ ballstreetsportsjournalcom@ballstreetsportsjournal.com:/home/ballstreetsportsjournalcom/public_html/wp-content/themes/ballstreet2/
+            ./ ballstreetsportsjournalcom@165.140.159.249:/home/ballstreetsportsjournalcom/public_html/wp-content/themes/ballstreet2/
