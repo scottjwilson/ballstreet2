@@ -7,15 +7,8 @@
 
 get_header();
 
-// Enqueue styles
-wp_enqueue_style(
-    "ballstreet-single-deal",
-    BALLSTREET_URI . "/css/single-deal.css",
-    ["ballstreet-base"],
-    BALLSTREET_VERSION
-);
-
 while (have_posts()):
+
     the_post();
     $deal_id = get_the_ID();
 
@@ -59,7 +52,9 @@ while (have_posts()):
             // Get athlete's school
             $school = get_field("school", $athlete_id);
             if ($school) {
-                if (is_array($school)) $school = $school[0];
+                if (is_array($school)) {
+                    $school = $school[0];
+                }
                 if (is_object($school)) {
                     $athlete_school = $school->post_title;
                 } elseif (is_numeric($school)) {
@@ -68,7 +63,10 @@ while (have_posts()):
             }
 
             if (has_post_thumbnail($athlete_id)) {
-                $athlete_thumbnail = get_the_post_thumbnail_url($athlete_id, "medium");
+                $athlete_thumbnail = get_the_post_thumbnail_url(
+                    $athlete_id,
+                    "medium",
+                );
             }
         }
     }
@@ -86,20 +84,26 @@ while (have_posts()):
 
     $arrow = $deal_trend === "up" ? "↑" : "↓";
     $formatted_value = ballstreet_format_value($deal_value);
-    $formatted_guaranteed = $deal_guaranteed ? ballstreet_format_value($deal_guaranteed) : "";
-?>
+    $formatted_guaranteed = $deal_guaranteed
+        ? ballstreet_format_value($deal_guaranteed)
+        : "";
+    ?>
 
 <article class="single-deal <?php echo esc_attr($deal_type_class); ?>">
 
     <!-- Deal Header -->
     <header class="deal-header fade-in">
         <div class="deal-header-top">
-            <span class="deal-type-badge <?php echo esc_attr($deal_type_class); ?>">
+            <span class="deal-type-badge <?php echo esc_attr(
+                $deal_type_class,
+            ); ?>">
                 <?php echo esc_html(strtoupper($deal_type)); ?>
             </span>
             <?php if ($deal_trend_percent): ?>
             <span class="deal-trend-badge <?php echo esc_attr($deal_trend); ?>">
-                <?php echo $arrow; ?> <?php echo esc_html($deal_trend_percent); ?>%
+                <?php echo $arrow; ?> <?php echo esc_html(
+     $deal_trend_percent,
+ ); ?>%
             </span>
             <?php endif; ?>
         </div>
@@ -107,7 +111,9 @@ while (have_posts()):
         <div class="deal-header-main">
             <?php if ($athlete_thumbnail): ?>
             <div class="deal-athlete-avatar">
-                <img src="<?php echo esc_url($athlete_thumbnail); ?>" alt="<?php echo esc_attr($athlete_name); ?>">
+                <img src="<?php echo esc_url(
+                    $athlete_thumbnail,
+                ); ?>" alt="<?php echo esc_attr($athlete_name); ?>">
             </div>
             <?php elseif ($athlete_name): ?>
             <div class="deal-athlete-avatar deal-athlete-initials">
@@ -116,7 +122,9 @@ while (have_posts()):
             <?php endif; ?>
 
             <div class="deal-header-info">
-                <h1 class="deal-athlete-name"><?php echo esc_html($athlete_name); ?></h1>
+                <h1 class="deal-athlete-name"><?php echo esc_html(
+                    $athlete_name,
+                ); ?></h1>
                 <?php if ($athlete_position || $athlete_school): ?>
                 <p class="deal-athlete-meta">
                     <?php if ($athlete_position): ?>
@@ -134,7 +142,9 @@ while (have_posts()):
         </div>
 
         <div class="deal-value-display">
-            <span class="deal-value-amount"><?php echo esc_html($formatted_value); ?></span>
+            <span class="deal-value-amount"><?php echo esc_html(
+                $formatted_value,
+            ); ?></span>
             <span class="deal-value-label">Total Value</span>
         </div>
     </header>
@@ -143,33 +153,40 @@ while (have_posts()):
     <section class="deal-stats fade-in fade-in-delay-1">
         <?php if ($deal_duration): ?>
         <div class="deal-stat">
-            <span class="deal-stat-value"><?php echo esc_html($deal_duration); ?></span>
+            <span class="deal-stat-value"><?php echo esc_html(
+                $deal_duration,
+            ); ?></span>
             <span class="deal-stat-label">Duration</span>
         </div>
         <?php endif; ?>
 
         <?php if ($formatted_guaranteed): ?>
         <div class="deal-stat">
-            <span class="deal-stat-value"><?php echo esc_html($formatted_guaranteed); ?></span>
+            <span class="deal-stat-value"><?php echo esc_html(
+                $formatted_guaranteed,
+            ); ?></span>
             <span class="deal-stat-label">Guaranteed</span>
         </div>
         <?php endif; ?>
 
         <div class="deal-stat">
-            <span class="deal-stat-value"><?php echo esc_html($deal_date); ?></span>
+            <span class="deal-stat-value"><?php echo esc_html(
+                $deal_date,
+            ); ?></span>
             <span class="deal-stat-label">Announced</span>
         </div>
 
         <?php if ($deal_value && $deal_duration):
             // Try to calculate annual value
-            preg_match('/(\d+)/', $deal_duration, $matches);
+            preg_match("/(\d+)/", $deal_duration, $matches);
             if (!empty($matches[1])) {
                 $years = intval($matches[1]);
                 if ($years > 0) {
-                    $annual = $deal_value / $years;
-        ?>
+                    $annual = $deal_value / $years; ?>
         <div class="deal-stat">
-            <span class="deal-stat-value"><?php echo ballstreet_format_value($annual); ?></span>
+            <span class="deal-stat-value"><?php echo ballstreet_format_value(
+                $annual,
+            ); ?></span>
             <span class="deal-stat-label">Per Year</span>
         </div>
         <?php
@@ -211,17 +228,28 @@ while (have_posts()):
     <?php if ($athlete_id): ?>
     <section class="deal-athlete-section fade-in fade-in-delay-3">
         <h2 class="deal-section-title">About the Athlete</h2>
-        <a href="<?php echo get_permalink($athlete_id); ?>" class="deal-athlete-card">
+        <a href="<?php echo get_permalink(
+            $athlete_id,
+        ); ?>" class="deal-athlete-card">
             <?php if ($athlete_thumbnail): ?>
             <div class="deal-athlete-card-avatar">
-                <img src="<?php echo esc_url($athlete_thumbnail); ?>" alt="<?php echo esc_attr($athlete_name); ?>">
+                <img src="<?php echo esc_url(
+                    $athlete_thumbnail,
+                ); ?>" alt="<?php echo esc_attr($athlete_name); ?>">
             </div>
             <?php endif; ?>
             <div class="deal-athlete-card-info">
-                <h3 class="deal-athlete-card-name"><?php echo esc_html($athlete_name); ?></h3>
+                <h3 class="deal-athlete-card-name"><?php echo esc_html(
+                    $athlete_name,
+                ); ?></h3>
                 <?php if ($athlete_position || $athlete_school): ?>
                 <p class="deal-athlete-card-meta">
-                    <?php echo esc_html(implode(" · ", array_filter([$athlete_position, $athlete_school]))); ?>
+                    <?php echo esc_html(
+                        implode(
+                            " · ",
+                            array_filter([$athlete_position, $athlete_school]),
+                        ),
+                    ); ?>
                 </p>
                 <?php endif; ?>
             </div>
@@ -253,12 +281,13 @@ while (have_posts()):
 
     $related = new WP_Query($related_args);
 
-    if ($related->have_posts()):
-    ?>
+    if ($related->have_posts()): ?>
     <section class="deal-related fade-in fade-in-delay-4">
         <h2 class="deal-section-title">Related Deals</h2>
         <div class="deal-related-grid">
-            <?php while ($related->have_posts()): $related->the_post();
+            <?php while ($related->have_posts()):
+
+                $related->the_post();
                 $rel_deal_id = get_the_ID();
                 $rel_value = get_field("deal_value", $rel_deal_id) ?: 0;
                 $rel_types = get_the_terms($rel_deal_id, "deal_type");
@@ -269,7 +298,9 @@ while (have_posts()):
                 $rel_athlete = get_field("deal_athlete", $rel_deal_id);
                 $rel_athlete_name = "";
                 if ($rel_athlete) {
-                    if (is_array($rel_athlete)) $rel_athlete = $rel_athlete[0];
+                    if (is_array($rel_athlete)) {
+                        $rel_athlete = $rel_athlete[0];
+                    }
                     if (is_object($rel_athlete)) {
                         $rel_athlete_name = $rel_athlete->post_title;
                     } elseif (is_numeric($rel_athlete)) {
@@ -279,18 +310,25 @@ while (have_posts()):
                 if (empty($rel_athlete_name)) {
                     $rel_athlete_name = get_the_title($rel_deal_id);
                 }
-            ?>
-            <a href="<?php the_permalink(); ?>" class="deal-related-card <?php echo esc_attr($rel_class); ?>">
-                <span class="deal-related-type <?php echo esc_attr($rel_class); ?>"><?php echo esc_html(strtoupper($rel_type)); ?></span>
-                <h3 class="deal-related-name"><?php echo esc_html($rel_athlete_name); ?></h3>
-                <span class="deal-related-value"><?php echo ballstreet_format_value($rel_value); ?></span>
+                ?>
+            <a href="<?php the_permalink(); ?>" class="deal-related-card <?php echo esc_attr(
+    $rel_class,
+); ?>">
+                <span class="deal-related-type <?php echo esc_attr(
+                    $rel_class,
+                ); ?>"><?php echo esc_html(strtoupper($rel_type)); ?></span>
+                <h3 class="deal-related-name"><?php echo esc_html(
+                    $rel_athlete_name,
+                ); ?></h3>
+                <span class="deal-related-value"><?php echo ballstreet_format_value(
+                    $rel_value,
+                ); ?></span>
             </a>
-            <?php endwhile; ?>
+            <?php
+            endwhile; ?>
         </div>
     </section>
-    <?php
-    wp_reset_postdata();
-    endif;
+    <?php wp_reset_postdata();endif;
     ?>
 
 </article>

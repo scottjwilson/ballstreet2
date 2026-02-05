@@ -297,6 +297,7 @@ body.menu-open {
 
 /* Main content area */
 .main {
-    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
     padding: 40px var(--container-padding) 80px;
 }
