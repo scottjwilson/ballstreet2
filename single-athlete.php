@@ -137,6 +137,12 @@ while (have_posts()):
         "post_type" => "post",
         "posts_per_page" => 6,
         "meta_query" => [
+            "relation" => "OR",
+            [
+                "key" => "associated_athlete",
+                "value" => '"' . $athlete_id . '"',
+                "compare" => "LIKE",
+            ],
             [
                 "key" => "related_athletes",
                 "value" => '"' . $athlete_id . '"',
@@ -379,6 +385,101 @@ while (have_posts()):
                         </div>
                     </section>
                 <?php endif; ?>
+
+                <!-- Related Deals Section -->
+                <?php
+                $related_deals = new WP_Query([
+                    "post_type" => "deal",
+                    "posts_per_page" => 6,
+                    "meta_query" => [
+                        [
+                            "key" => "deal_athlete",
+                            "value" => $athlete_id,
+                            "compare" => "LIKE",
+                        ],
+                    ],
+                ]);
+
+                if ($related_deals->have_posts()): ?>
+                    <section class="athlete-section fade-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Deals & Contracts</h2>
+                            <span class="section-count"><?php echo $related_deals->found_posts; ?> deals</span>
+                        </div>
+
+                        <div class="athlete-deals-grid">
+                            <?php
+                            while ($related_deals->have_posts()):
+
+                                $related_deals->the_post();
+                                $deal_id = get_the_ID();
+                                $deal_value =
+                                    get_field("deal_value", $deal_id) ?: 0;
+                                $deal_trend =
+                                    get_field("deal_trend", $deal_id) ?: "up";
+                                $deal_trend_percent =
+                                    get_field("deal_trend_percent", $deal_id) ?:
+                                    "";
+                                $deal_types = get_the_terms(
+                                    $deal_id,
+                                    "deal_type",
+                                );
+                                $deal_type = !empty($deal_types)
+                                    ? $deal_types[0]->name
+                                    : "Deal";
+                                $deal_type_class = function_exists(
+                                    "ballstreet_get_deal_class",
+                                )
+                                    ? ballstreet_get_deal_class($deal_type)
+                                    : "nil";
+                                $deal_details =
+                                    get_field("deal_details", $deal_id) ?: "";
+                                ?>
+                                <a href="<?php the_permalink(); ?>" class="athlete-deal-card <?php echo esc_attr(
+    $deal_type_class,
+); ?>">
+                                    <div class="athlete-deal-header">
+                                        <span class="athlete-deal-type <?php echo esc_attr(
+                                            $deal_type_class,
+                                        ); ?>">
+                                            <?php echo esc_html(
+                                                strtoupper($deal_type),
+                                            ); ?>
+                                        </span>
+                                        <?php if ($deal_trend_percent): ?>
+                                        <span class="athlete-deal-trend <?php echo esc_attr(
+                                            $deal_trend,
+                                        ); ?>">
+                                            <?php echo $deal_trend === "up"
+                                                ? "↑"
+                                                : "↓"; ?> <?php echo esc_html(
+     $deal_trend_percent,
+ ); ?>%
+                                        </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="athlete-deal-value">
+                                        <?php echo ballstreet_format_value(
+                                            $deal_value,
+                                        ); ?>
+                                    </div>
+                                    <?php if ($deal_details): ?>
+                                    <p class="athlete-deal-details"><?php echo esc_html(
+                                        wp_trim_words($deal_details, 12),
+                                    ); ?></p>
+                                    <?php endif; ?>
+                                    <div class="athlete-deal-date">
+                                        <?php echo get_the_date("M j, Y"); ?>
+                                    </div>
+                                </a>
+                            <?php
+                            endwhile;
+                            wp_reset_postdata();
+                            ?>
+                        </div>
+                    </section>
+                <?php endif;
+                ?>
             </div>
 
             <!-- Sidebar -->
