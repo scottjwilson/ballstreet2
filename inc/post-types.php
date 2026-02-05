@@ -310,35 +310,6 @@ function ballstreet_create_default_deal_types(): void
 add_action("init", "ballstreet_create_default_deal_types", 10);
 
 /**
- * Sort athletes by NIL valuation (descending) on archive pages
- */
-function ballstreet_sort_athletes_by_nil($query): void
-{
-    if (is_admin() || !$query->is_main_query()) {
-        return;
-    }
-
-    if (
-        is_post_type_archive("athlete") ||
-        (is_tax() && $query->get("post_type") === "athlete")
-    ) {
-        $query->set("meta_query", [
-            "relation" => "OR",
-            "nil_clause" => [
-                "key" => "nil_valuation",
-                "compare" => "EXISTS",
-            ],
-            [
-                "key" => "nil_valuation",
-                "compare" => "NOT EXISTS",
-            ],
-        ]);
-        $query->set("orderby", ["nil_clause" => "DESC"]);
-    }
-}
-add_action("pre_get_posts", "ballstreet_sort_athletes_by_nil");
-
-/**
  * Sort deals by value (descending) on archive pages
  */
 function ballstreet_sort_deals_by_value($query): void

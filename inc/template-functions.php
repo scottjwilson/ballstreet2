@@ -1126,6 +1126,15 @@ function ballstreet_render_athletes_table(array $args = []): void
         echo '<div class="athletes-empty"><p>No athletes found.</p></div>';
         return;
     }
+
+    // Sort athletes by NIL value for proper ranking
+    usort($args["athletes"], function ($a, $b) {
+        $nil_a =
+            get_field("nil_valuation", $a) ?: get_field("valuation", $a) ?: 0;
+        $nil_b =
+            get_field("nil_valuation", $b) ?: get_field("valuation", $b) ?: 0;
+        return floatval($nil_b) - floatval($nil_a); // Descending order
+    });
     ?>
     <div class="athletes-table-container" data-athletes-table data-view="<?php echo esc_attr(
         $args["view"],
