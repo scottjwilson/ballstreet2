@@ -31,15 +31,11 @@
 .sidebar-card {
     background: var(--bg-card);
     border-radius: var(--radius-xl);
+    padding: 24px;
     border: 1px solid var(--border-color);
     flex: 1;
     cursor: pointer;
     transition: all var(--transition-fast);
-    overflow: hidden;
-}
-
-.sidebar-card:not(.has-thumbnail) {
-    padding: 24px;
 }
 
 .sidebar-card:hover {
@@ -53,34 +49,6 @@
     text-decoration: none;
     color: inherit;
     display: block;
-}
-
-/* Sidebar thumbnail */
-.sidebar-thumbnail {
-    width: 100%;
-    height: 120px;
-    overflow: hidden;
-    background: var(--bg-elevated);
-}
-
-.sidebar-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-base);
-}
-
-.sidebar-card:hover .sidebar-thumbnail img {
-    transform: scale(1.05);
-}
-
-/* Sidebar content wrapper */
-.sidebar-content {
-    padding: 16px 20px 20px;
-}
-
-.sidebar-card:not(.has-thumbnail) .sidebar-content {
-    padding: 0;
 }
 
 .sidebar-badge {
