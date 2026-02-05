@@ -34,7 +34,7 @@ get_header(); ?>
     </div>
 
     <div class="deals-grid">
-        <?php ballstreet_render_deals_grid(3, false); ?>
+        <?php ballstreet_render_deals_grid(6, false); ?>
     </div>
 </section>
 
