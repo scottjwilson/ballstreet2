@@ -674,7 +674,7 @@ function ballstreet_render_article_rows(int $count = 5): void
     $args = [
         "post_type" => "post",
         "posts_per_page" => $count,
-        "offset" => 4, // Skip featured and sidebar posts
+        "offset" => 1, // Skip featured hero post only
     ];
 
     $query = new WP_Query($args);
