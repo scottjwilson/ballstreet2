@@ -22,6 +22,26 @@ wp_enqueue_style(
 );
 
 $total_athletes = wp_count_posts("athlete")->publish;
+$total_schools = wp_count_posts("school")->publish;
+
+// Calculate total NIL value
+$total_nil = 0;
+$athletes_query = new WP_Query([
+    "post_type" => "athlete",
+    "posts_per_page" => -1,
+    "fields" => "ids",
+]);
+if ($athletes_query->have_posts()) {
+    foreach ($athletes_query->posts as $athlete_id) {
+        $nil_value =
+            get_field("nil_valuation", $athlete_id) ?:
+            get_field("valuation", $athlete_id);
+        if ($nil_value) {
+            $total_nil += floatval($nil_value);
+        }
+    }
+}
+wp_reset_postdata();
 ?>
 
 <header class="archive-header fade-in">
@@ -37,11 +57,15 @@ $total_athletes = wp_count_posts("athlete")->publish;
             <span class="stat-label">Athletes Tracked</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value">$2.8B</span>
+            <span class="stat-value"><?php echo ballstreet_format_value(
+                $total_nil,
+            ); ?></span>
             <span class="stat-label">Total NIL Value</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value">150+</span>
+            <span class="stat-value"><?php echo number_format(
+                $total_schools,
+            ); ?></span>
             <span class="stat-label">Schools</span>
         </div>
     </div>

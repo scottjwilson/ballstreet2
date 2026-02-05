@@ -736,7 +736,10 @@ function ballstreet_get_athlete_fields(int $athlete_id): array
 {
     $fields = [
         "position" => get_field("position", $athlete_id) ?: "",
-        "nil_valuation" => get_field("nil_valuation", $athlete_id) ?: 0,
+        "nil_valuation" =>
+            get_field("nil_valuation", $athlete_id) ?:
+            get_field("valuation", $athlete_id) ?:
+            0,
         "class_year" => get_field("class_year", $athlete_id) ?: "",
         "height" => get_field("height", $athlete_id) ?: "",
         "weight" => get_field("weight", $athlete_id) ?: "",
@@ -750,9 +753,18 @@ function ballstreet_get_athlete_fields(int $athlete_id): array
     // Get school relationship
     $school = get_field("school", $athlete_id);
     if ($school) {
-        $school_id = is_object($school) ? $school->ID : $school;
-        $fields["school_id"] = $school_id;
-        $fields["school_name"] = get_the_title($school_id);
+        // Handle array (multi-select relationship)
+        if (is_array($school)) {
+            $school = $school[0];
+        }
+        // Handle object or ID
+        if (is_object($school) && isset($school->ID)) {
+            $fields["school_id"] = $school->ID;
+            $fields["school_name"] = $school->post_title;
+        } elseif (is_numeric($school)) {
+            $fields["school_id"] = $school;
+            $fields["school_name"] = get_the_title($school);
+        }
     }
 
     // Get sponsors relationship
