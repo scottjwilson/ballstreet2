@@ -1014,7 +1014,6 @@ function ballstreet_render_athletes_table(array $args = []): void
                                         <span class="nil-amount"><?php echo ballstreet_format_value(
                                             $fields["nil_valuation"],
                                         ); ?></span>
-                                        <span class="nil-trend up">↑ 12%</span>
                                     </div>
                                 <?php else: ?>
                                     <span class="nil-empty">—</span>

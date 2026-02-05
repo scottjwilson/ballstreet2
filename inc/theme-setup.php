@@ -293,3 +293,33 @@ function ballstreet_body_classes(array $classes): array
     return $classes;
 }
 add_filter("body_class", "ballstreet_body_classes");
+
+/**
+ * Modify athlete archive query to order by NIL value
+ */
+function ballstreet_athlete_archive_order(WP_Query $query): void
+{
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    if (is_post_type_archive("athlete")) {
+        // Order by nil_valuation or valuation field (whichever exists)
+        $query->set("meta_query", [
+            "relation" => "OR",
+            "nil_clause" => [
+                "key" => "nil_valuation",
+                "compare" => "EXISTS",
+            ],
+            "val_clause" => [
+                "key" => "valuation",
+                "compare" => "EXISTS",
+            ],
+        ]);
+        $query->set("orderby", [
+            "nil_clause" => "DESC",
+            "val_clause" => "DESC",
+        ]);
+    }
+}
+add_action("pre_get_posts", "ballstreet_athlete_archive_order");
