@@ -4,6 +4,15 @@
  */
 
 /* ========================================
+   SINGLE ARTICLE CONTAINER
+   ======================================== */
+
+.single-article {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ========================================
    ARTICLE HEADER
    ======================================== */
 
@@ -95,6 +104,8 @@
    ======================================== */
 
 .single-article > .article-content {
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .article-content h2 {
