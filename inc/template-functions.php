@@ -364,19 +364,31 @@ function ballstreet_render_sidebar_cards(int $count = 3): void
             $time_ago =
                 human_time_diff(get_the_time("U"), current_time("timestamp")) .
                 " ago";
+            $has_thumbnail = has_post_thumbnail();
             ?>
-            <article class="sidebar-card fade-in fade-in-delay-<?php echo $delay; ?>">
+            <article class="sidebar-card <?php echo $has_thumbnail
+                ? "has-thumbnail"
+                : ""; ?> fade-in fade-in-delay-<?php echo $delay; ?>">
                 <a href="<?php the_permalink(); ?>">
-                    <div class="sidebar-badge <?php echo esc_attr(
-                        $badge_class,
-                    ); ?>">
-                        <span class="dot"></span>
-                        <?php echo esc_html($cat_name); ?>
+                    <?php if ($has_thumbnail): ?>
+                    <div class="sidebar-thumbnail">
+                        <?php the_post_thumbnail("medium", [
+                            "class" => "sidebar-thumb-img",
+                        ]); ?>
                     </div>
-                    <h3 class="sidebar-title"><?php the_title(); ?></h3>
-                    <p class="sidebar-meta"><?php echo esc_html(
-                        $time_ago,
-                    ); ?></p>
+                    <?php endif; ?>
+                    <div class="sidebar-content">
+                        <div class="sidebar-badge <?php echo esc_attr(
+                            $badge_class,
+                        ); ?>">
+                            <span class="dot"></span>
+                            <?php echo esc_html($cat_name); ?>
+                        </div>
+                        <h3 class="sidebar-title"><?php the_title(); ?></h3>
+                        <p class="sidebar-meta"><?php echo esc_html(
+                            $time_ago,
+                        ); ?></p>
+                    </div>
                 </a>
             </article>
             <?php $delay++;
