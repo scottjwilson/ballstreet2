@@ -18,7 +18,7 @@
      ======================================== */
     --text-primary: #f0f0f0;
     --text-secondary: #a0a0a5;
-    --text-muted: #6b6b70;
+    --text-muted: #8b8b90;
 
     /* ========================================
      COLORS - Accents
@@ -63,7 +63,7 @@
     );
     --hero-title-color: #fff;
     --hero-subtitle-color: rgba(255, 255, 255, 0.7);
-    --hero-meta-color: rgba(255, 255, 255, 0.5);
+    --hero-meta-color: rgba(255, 255, 255, 0.75);
     --hero-author-color: rgba(255, 255, 255, 0.8);
     --hero-symbol-color: rgba(255, 255, 255, 0.03);
 
@@ -158,20 +158,20 @@
     --text-secondary: #4a4a4d;
     --text-muted: #8a8a8f;
 
-    /* Accents - slightly adjusted for light mode contrast */
-    --accent-green: #059669;
-    --accent-green-hover: #047857;
-    --accent-green-dim: rgba(5, 150, 105, 0.1);
+    /* Accents - adjusted for light mode contrast (WCAG AA 4.5:1) */
+    --accent-green: #047857;
+    --accent-green-hover: #065f46;
+    --accent-green-dim: rgba(5, 150, 105, 0.12);
     --accent-green-light: #d1fae5;
 
-    --accent-blue: #2563eb;
-    --accent-blue-dim: rgba(37, 99, 235, 0.1);
+    --accent-blue: #1d4ed8;
+    --accent-blue-dim: rgba(37, 99, 235, 0.12);
 
-    --accent-orange: #d97706;
-    --accent-orange-dim: rgba(217, 119, 6, 0.1);
+    --accent-orange: #b45309;
+    --accent-orange-dim: rgba(217, 119, 6, 0.12);
 
-    --accent-red: #dc2626;
-    --accent-red-dim: rgba(220, 38, 38, 0.1);
+    --accent-red: #b91c1c;
+    --accent-red-dim: rgba(220, 38, 38, 0.12);
     --accent-red-light: #fee2e2;
 
     /* Borders */
@@ -236,20 +236,20 @@
         --text-secondary: #4a4a4d;
         --text-muted: #8a8a8f;
 
-        /* Accents */
-        --accent-green: #059669;
-        --accent-green-hover: #047857;
-        --accent-green-dim: rgba(5, 150, 105, 0.1);
+        /* Accents - adjusted for contrast (WCAG AA 4.5:1) */
+        --accent-green: #047857;
+        --accent-green-hover: #065f46;
+        --accent-green-dim: rgba(5, 150, 105, 0.12);
         --accent-green-light: #d1fae5;
 
-        --accent-blue: #2563eb;
-        --accent-blue-dim: rgba(37, 99, 235, 0.1);
+        --accent-blue: #1d4ed8;
+        --accent-blue-dim: rgba(37, 99, 235, 0.12);
 
-        --accent-orange: #d97706;
-        --accent-orange-dim: rgba(217, 119, 6, 0.1);
+        --accent-orange: #b45309;
+        --accent-orange-dim: rgba(217, 119, 6, 0.12);
 
-        --accent-red: #dc2626;
-        --accent-red-dim: rgba(220, 38, 38, 0.1);
+        --accent-red: #b91c1c;
+        --accent-red-dim: rgba(220, 38, 38, 0.12);
         --accent-red-light: #fee2e2;
 
         /* Borders */

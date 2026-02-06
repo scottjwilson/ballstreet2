@@ -75,6 +75,51 @@ function ballstreet_preload_fonts(): void
 add_action("wp_head", "ballstreet_preload_fonts", 1);
 
 /**
+ * Output meta description for SEO
+ */
+function ballstreet_meta_description(): void
+{
+    $description = "";
+
+    if (is_front_page() || is_home()) {
+        $description =
+            "Ball Street Sports Journal covers NIL deals, contract negotiations, trades, and market analysis across college and professional sports.";
+    } elseif (is_singular()) {
+        $post = get_queried_object();
+        if (has_excerpt($post)) {
+            $description = wp_strip_all_tags(get_the_excerpt($post));
+        } else {
+            $description = wp_trim_words(
+                wp_strip_all_tags($post->post_content),
+                25,
+                "...",
+            );
+        }
+    } elseif (is_post_type_archive("athlete")) {
+        $description =
+            "Browse the complete athlete database with NIL valuations, rankings, and sponsorship details.";
+    } elseif (is_post_type_archive("deal")) {
+        $description =
+            "Track the latest sports deals, contracts, trades, and NIL agreements across college and professional athletics.";
+    } elseif (is_category() || is_tag() || is_tax()) {
+        $term = get_queried_object();
+        $description =
+            $term->description ?:
+            "Browse " .
+                $term->name .
+                " articles on Ball Street Sports Journal.";
+    }
+
+    if ($description) {
+        echo '<meta name="description" content="' .
+            esc_attr($description) .
+            '">' .
+            "\n";
+    }
+}
+add_action("wp_head", "ballstreet_meta_description", 2);
+
+/**
  * Enqueue base styles and scripts
  */
 function ballstreet_enqueue_assets(): void
@@ -347,6 +392,26 @@ function ballstreet_dequeue_unnecessary_scripts(): void
     }
 }
 add_action("wp_enqueue_scripts", "ballstreet_dequeue_unnecessary_scripts", 20);
+
+/**
+ * Ensure robots.txt is valid and SEO-friendly
+ */
+function ballstreet_robots_txt(string $output, bool $public): string
+{
+    if (!$public) {
+        return $output;
+    }
+
+    $site_url = home_url("/");
+
+    $output = "User-agent: *\n";
+    $output .= "Disallow: /wp-admin/\n";
+    $output .= "Allow: /wp-admin/admin-ajax.php\n\n";
+    $output .= "Sitemap: {$site_url}wp-sitemap.xml\n";
+
+    return $output;
+}
+add_filter("robots_txt", "ballstreet_robots_txt", 10, 2);
 
 /**
  * Disable Gravatar to eliminate third-party cookies (secure.gravatar.com)

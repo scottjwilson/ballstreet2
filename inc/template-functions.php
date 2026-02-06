@@ -306,7 +306,7 @@ function ballstreet_render_hero_article($post = null): void
     ?>
     <a href="<?php echo get_permalink(
         $post,
-    ); ?>" class="hero-main fade-in fade-in-delay-1">
+    ); ?>" class="hero-main fade-in fade-in-delay-1" aria-label="<?php echo esc_attr(get_the_title($post)); ?>">
         <?php if (has_post_thumbnail($post)): ?>
             <div class="hero-main-image">
                 <?php echo get_the_post_thumbnail($post, "ballstreet-hero", [
@@ -377,7 +377,7 @@ function ballstreet_render_sidebar_cards(int $count = 3): void
                         <span class="dot"></span>
                         <?php echo esc_html($cat_name); ?>
                     </div>
-                    <h3 class="sidebar-title"><?php the_title(); ?></h3>
+                    <h2 class="sidebar-title"><?php the_title(); ?></h2>
                     <p class="sidebar-meta"><?php echo esc_html(
                         $time_ago,
                     ); ?></p>
@@ -836,7 +836,7 @@ function ballstreet_render_article_rows(int $count = 5): void
 
         foreach ($placeholders as $item): ?>
             <article class="article-row fade-in">
-                <a href="#" class="article-row-link">
+                <div class="article-row-link">
                     <div class="article-thumbnail article-thumbnail-placeholder">
                         <span class="placeholder-icon">📰</span>
                     </div>
@@ -876,7 +876,7 @@ function ballstreet_render_article_rows(int $count = 5): void
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>
                     </div>
-                </a>
+                </div>
             </article>
         <?php endforeach;
     endif;
