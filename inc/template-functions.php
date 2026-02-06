@@ -1161,11 +1161,13 @@ function ballstreet_render_athletes_table(array $args = []): void
         <div class="athletes-toolbar">
             <?php if ($args["show_search"]): ?>
             <div class="athletes-search">
+                <label for="athletes-search" class="sr-only">Search athletes</label>
                 <span class="athletes-search-icon"><?php echo ballstreet_icon(
                     "search",
                     18,
                 ); ?></span>
                 <input
+                    id="athletes-search"
                     type="text"
                     class="athletes-search-input"
                     placeholder="Search athletes..."
@@ -1176,7 +1178,8 @@ function ballstreet_render_athletes_table(array $args = []): void
 
             <?php if ($args["show_filters"]): ?>
             <div class="athletes-filters">
-                <select class="athletes-filter" data-athletes-filter="position">
+                <label for="athletes-filter-position" class="sr-only">Filter by position</label>
+                <select id="athletes-filter-position" class="athletes-filter" data-athletes-filter="position">
                     <option value="">All Positions</option>
                     <option value="qb">Quarterback</option>
                     <option value="rb">Running Back</option>
@@ -1189,7 +1192,8 @@ function ballstreet_render_athletes_table(array $args = []): void
                     <option value="k">Kicker</option>
                     <option value="p">Punter</option>
                 </select>
-                <select class="athletes-filter" data-athletes-filter="school">
+                <label for="athletes-filter-school" class="sr-only">Filter by school</label>
+                <select id="athletes-filter-school" class="athletes-filter" data-athletes-filter="school">
                     <option value="">All Schools</option>
                     <?php
                     $schools = get_posts([

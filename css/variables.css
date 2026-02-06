@@ -175,8 +175,8 @@
     --accent-red-light: #fee2e2;
 
     /* Borders */
-    --border-color: rgba(0, 0, 0, 0.08);
-    --border-color-hover: rgba(0, 0, 0, 0.15);
+    --border-color: rgba(0, 0, 0, 0.15);
+    --border-color-hover: rgba(0, 0, 0, 0.25);
 
     /* Hero - refined for light mode */
     --hero-gradient: linear-gradient(
@@ -253,8 +253,8 @@
         --accent-red-light: #fee2e2;
 
         /* Borders */
-        --border-color: rgba(0, 0, 0, 0.08);
-        --border-color-hover: rgba(0, 0, 0, 0.15);
+        --border-color: rgba(0, 0, 0, 0.15);
+        --border-color-hover: rgba(0, 0, 0, 0.25);
 
         /* Hero */
         --hero-gradient: linear-gradient(
