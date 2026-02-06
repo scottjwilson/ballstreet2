@@ -309,7 +309,11 @@ function ballstreet_render_hero_article($post = null): void
     ); ?>" class="hero-main fade-in fade-in-delay-1">
         <?php if (has_post_thumbnail($post)): ?>
             <div class="hero-main-image">
-                <?php echo get_the_post_thumbnail($post, "ballstreet-hero"); ?>
+                <?php echo get_the_post_thumbnail($post, "ballstreet-hero", [
+                    "fetchpriority" => "high",
+                    "loading" => false,
+                    "decoding" => "async",
+                ]); ?>
             </div>
         <?php endif; ?>
         <span class="hero-symbol">$$$</span>
@@ -722,6 +726,8 @@ function ballstreet_render_article_rows(int $count = 5): void
                     <div class="article-thumbnail">
                         <?php the_post_thumbnail("medium", [
                             "class" => "article-thumb-img",
+                            "loading" => "lazy",
+                            "decoding" => "async",
                         ]); ?>
                     </div>
                     <?php endif; ?>

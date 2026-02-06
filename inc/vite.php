@@ -9,13 +9,41 @@
 defined("ABSPATH") || exit();
 
 /**
- * Detect if Vite dev server is running and get the base path
+ * Check if we're in a local development environment
+ *
+ * @return bool
+ */
+function ballstreet_is_local_environment(): bool
+{
+    $home_url = home_url();
+    return strpos($home_url, "localhost") !== false ||
+        strpos($home_url, "127.0.0.1") !== false ||
+        strpos($home_url, ".local") !== false ||
+        strpos($home_url, ".dev") !== false;
+}
+
+/**
+ * Detect if Vite dev server is running and get the base path.
+ * Only checks in local development environments to avoid
+ * expensive HTTP requests in production.
  *
  * @return array{running: bool, base: string, server: string}
  */
 function ballstreet_detect_vite_server(): array
 {
     $vite_server = "http://localhost:3000";
+    $default = ["running" => false, "base" => "/", "server" => $vite_server];
+
+    // Never check for Vite in non-local environments
+    if (!ballstreet_is_local_environment()) {
+        return $default;
+    }
+
+    // Use a static cache to avoid multiple HTTP checks per request
+    static $result = null;
+    if ($result !== null) {
+        return $result;
+    }
 
     $response = @wp_remote_get($vite_server . "/js/main.js", [
         "timeout" => 1,
@@ -27,7 +55,8 @@ function ballstreet_detect_vite_server(): array
         is_wp_error($response) ||
         wp_remote_retrieve_response_code($response) !== 200
     ) {
-        return ["running" => false, "base" => "/", "server" => $vite_server];
+        $result = $default;
+        return $result;
     }
 
     // Try @vite/client at root
@@ -41,7 +70,8 @@ function ballstreet_detect_vite_server(): array
         !is_wp_error($client_response) &&
         wp_remote_retrieve_response_code($client_response) === 200
     ) {
-        return ["running" => true, "base" => "/", "server" => $vite_server];
+        $result = ["running" => true, "base" => "/", "server" => $vite_server];
+        return $result;
     }
 
     // Try with theme base path
@@ -58,42 +88,34 @@ function ballstreet_detect_vite_server(): array
         !is_wp_error($client_response) &&
         wp_remote_retrieve_response_code($client_response) === 200
     ) {
-        return [
+        $result = [
             "running" => true,
             "base" => "/wp-content/themes/ballstreet2/",
             "server" => $vite_server,
         ];
+        return $result;
     }
 
-    return ["running" => true, "base" => "/", "server" => $vite_server];
+    $result = ["running" => true, "base" => "/", "server" => $vite_server];
+    return $result;
 }
 
 /**
- * Check if we're in a local development environment
- *
- * @return bool
- */
-function ballstreet_is_local_environment(): bool
-{
-    $home_url = home_url();
-    return strpos($home_url, "localhost") !== false ||
-        strpos($home_url, "127.0.0.1") !== false ||
-        strpos($home_url, ".local") !== false ||
-        strpos($home_url, ".dev") !== false;
-}
-
-/**
- * Output Vite client scripts in head for HMR
+ * Output Vite client scripts in head for HMR (development only)
  */
 function ballstreet_output_vite_scripts(): void
 {
-    $vite = ballstreet_detect_vite_server();
-
-    if (!$vite["running"] && !ballstreet_is_local_environment()) {
+    if (!ballstreet_is_local_environment()) {
         return;
     }
 
-    $vite_base = $vite["running"] ? $vite["base"] : "/";
+    $vite = ballstreet_detect_vite_server();
+
+    if (!$vite["running"]) {
+        return;
+    }
+
+    $vite_base = $vite["base"];
     $vite_client_url = $vite["server"] . $vite_base . "@vite/client";
     $vite_main_url = $vite["server"] . $vite_base . "js/main.js";
 

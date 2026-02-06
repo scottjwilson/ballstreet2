@@ -7,7 +7,7 @@ export default defineConfig(({ command }) => {
   return {
     // Only use base path in production builds
     // In dev mode, Vite serves from root for simpler URLs
-    base: isProduction ? "/wp-content/themes/dev-toolkit/" : "/",
+    base: isProduction ? "/wp-content/themes/ballstreet2/" : "/",
 
     build: {
       manifest: true,
@@ -19,11 +19,11 @@ export default defineConfig(({ command }) => {
           main: resolve(__dirname, "js/main.js"),
         },
         output: {
-          entryFileNames: "js/[name].js",
+          entryFileNames: "js/[name]-[hash].js",
           chunkFileNames: "js/[name]-[hash].js",
           assetFileNames: (assetInfo) => {
             if (assetInfo.name && assetInfo.name.endsWith(".css")) {
-              return "css/[name][extname]";
+              return "css/[name]-[hash][extname]";
             }
             return "assets/[name]-[hash][extname]";
           },

@@ -4,6 +4,7 @@
  */
 
 // Import all CSS files - Vite will watch and HMR these automatically
+import "../css/fonts.css";
 import "../css/variables.css";
 import "../css/base.css";
 import "../css/layout.css";

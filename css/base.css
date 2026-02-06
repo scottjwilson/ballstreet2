@@ -209,6 +209,32 @@ p {
     transform: translateY(0);
 }
 
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .fade-in,
+    .fade-in-delay-1,
+    .fade-in-delay-2,
+    .fade-in-delay-3,
+    .fade-in-delay-4,
+    .fade-in-delay-5 {
+        opacity: 1;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 /* ========================================
    UTILITIES
    ======================================== */

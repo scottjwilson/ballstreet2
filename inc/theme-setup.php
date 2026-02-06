@@ -49,29 +49,36 @@ function ballstreet_setup(): void
 add_action("after_setup_theme", "ballstreet_setup");
 
 /**
- * Add preconnect hints for Google Fonts
+ * Preload critical fonts (DM Sans is used for all body text)
  */
-function ballstreet_font_preconnect(): void
+function ballstreet_preload_fonts(): void
 {
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' .
+    // Use hashed font path from Vite manifest when available
+    $font_url = BALLSTREET_URI . "/fonts/dm-sans-latin.woff2";
+    $manifest_path = get_theme_file_path("dist/.vite/manifest.json");
+
+    if (file_exists($manifest_path)) {
+        $manifest = json_decode(file_get_contents($manifest_path), true);
+        if (isset($manifest["fonts/dm-sans-latin.woff2"]["file"])) {
+            $font_url =
+                BALLSTREET_URI .
+                "/dist/" .
+                $manifest["fonts/dm-sans-latin.woff2"]["file"];
+        }
+    }
+
+    echo '<link rel="preload" href="' .
+        esc_url($font_url) .
+        '" as="font" type="font/woff2" crossorigin>' .
         "\n";
 }
-add_action("wp_head", "ballstreet_font_preconnect", 1);
+add_action("wp_head", "ballstreet_preload_fonts", 1);
 
 /**
  * Enqueue base styles and scripts
  */
 function ballstreet_enqueue_assets(): void
 {
-    // Google Fonts - Ball Street Typography
-    wp_enqueue_style(
-        "google-fonts",
-        "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap",
-        [],
-        null,
-    );
-
     // Main stylesheet (required by WordPress)
     wp_enqueue_style(
         "ballstreet-style",
@@ -94,9 +101,15 @@ function ballstreet_enqueue_assets(): void
 
     // Fallback: enqueue CSS directly if Vite is not available
     wp_enqueue_style(
+        "ballstreet-fonts",
+        BALLSTREET_URI . "/css/fonts.css",
+        [],
+        BALLSTREET_VERSION,
+    );
+    wp_enqueue_style(
         "ballstreet-variables",
         BALLSTREET_URI . "/css/variables.css",
-        ["google-fonts"],
+        ["ballstreet-fonts"],
         BALLSTREET_VERSION,
     );
     wp_enqueue_style(
@@ -293,3 +306,44 @@ function ballstreet_body_classes(array $classes): array
     return $classes;
 }
 add_filter("body_class", "ballstreet_body_classes");
+
+/**
+ * Remove WordPress default bloat for better Lighthouse scores
+ */
+function ballstreet_remove_bloat(): void
+{
+    // Remove emoji scripts and styles
+    remove_action("wp_head", "print_emoji_detection_script", 7);
+    remove_action("wp_print_styles", "print_emoji_styles");
+    remove_action("admin_print_scripts", "print_emoji_detection_script");
+    remove_action("admin_print_styles", "print_emoji_styles");
+
+    // Remove oEmbed discovery
+    remove_action("wp_head", "wp_oembed_add_discovery_links");
+    remove_action("wp_head", "wp_oembed_add_host_js");
+
+    // Remove unnecessary meta tags
+    remove_action("wp_head", "wp_generator");
+    remove_action("wp_head", "wlwmanifest_link");
+    remove_action("wp_head", "rsd_link");
+    remove_action("wp_head", "wp_shortlink_wp_head");
+    remove_action("wp_head", "rest_output_link_wp_head", 10);
+
+    // Remove DNS prefetch for WordPress.org (emoji CDN)
+    add_filter("emoji_svg_url", "__return_false");
+}
+add_action("after_setup_theme", "ballstreet_remove_bloat");
+
+/**
+ * Remove jQuery migrate (not needed with vanilla JS theme)
+ */
+function ballstreet_dequeue_unnecessary_scripts(): void
+{
+    if (!is_admin()) {
+        wp_deregister_script("jquery");
+        wp_dequeue_style("wp-block-library");
+        wp_dequeue_style("classic-theme-styles");
+        wp_dequeue_style("global-styles");
+    }
+}
+add_action("wp_enqueue_scripts", "ballstreet_dequeue_unnecessary_scripts", 20);

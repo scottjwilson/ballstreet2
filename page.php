@@ -31,7 +31,11 @@ wp_enqueue_style(
     <!-- Featured Image -->
     <?php if (has_post_thumbnail()): ?>
         <div class="article-featured-image fade-in fade-in-delay-1">
-            <?php the_post_thumbnail("ballstreet-hero"); ?>
+            <?php the_post_thumbnail("ballstreet-hero", [
+                "fetchpriority" => "high",
+                "loading" => false,
+                "decoding" => "async",
+            ]); ?>
         </div>
     <?php endif; ?>
 
