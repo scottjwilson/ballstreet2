@@ -109,6 +109,16 @@
     transition: all var(--transition-fast);
 }
 
+[data-theme="light"] .nav-cta {
+    color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .nav-cta {
+        color: #fff;
+    }
+}
+
 .nav-cta:hover {
     background: var(--accent-green-hover);
     transform: translateY(-1px);
