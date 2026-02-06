@@ -347,3 +347,93 @@ function ballstreet_dequeue_unnecessary_scripts(): void
     }
 }
 add_action("wp_enqueue_scripts", "ballstreet_dequeue_unnecessary_scripts", 20);
+
+/**
+ * Disable Gravatar to eliminate third-party cookies (secure.gravatar.com)
+ */
+function ballstreet_disable_gravatar(
+    string $avatar,
+    $id_or_email,
+    int $size,
+    string $default,
+    string $alt,
+): string {
+    // Return a simple SVG placeholder instead of fetching from Gravatar
+    $initials = "";
+    if (is_string($id_or_email)) {
+        $initials = strtoupper(substr($id_or_email, 0, 1));
+    } elseif (is_object($id_or_email) && isset($id_or_email->comment_author)) {
+        $initials = strtoupper(substr($id_or_email->comment_author, 0, 1));
+    } else {
+        $user = false;
+        if (is_numeric($id_or_email)) {
+            $user = get_user_by("id", (int) $id_or_email);
+        } elseif (
+            is_object($id_or_email) &&
+            isset($id_or_email->user_id) &&
+            $id_or_email->user_id
+        ) {
+            $user = get_user_by("id", $id_or_email->user_id);
+        }
+        if ($user) {
+            $initials = strtoupper(substr($user->display_name, 0, 1));
+        }
+    }
+
+    $svg =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' .
+        $size .
+        '" height="' .
+        $size .
+        '" viewBox="0 0 ' .
+        $size .
+        " " .
+        $size .
+        '"><rect fill="%23374151" width="' .
+        $size .
+        '" height="' .
+        $size .
+        '"/><text x="50%25" y="50%25" fill="%23d1d5db" font-family="sans-serif" font-size="' .
+        $size * 0.4 .
+        '" text-anchor="middle" dy=".35em">' .
+        $initials .
+        "</text></svg>";
+
+    return '<img alt="' .
+        esc_attr($alt) .
+        '" src="data:image/svg+xml,' .
+        $svg .
+        '" class="avatar avatar-' .
+        $size .
+        '" height="' .
+        $size .
+        '" width="' .
+        $size .
+        '" loading="lazy" decoding="async" />';
+}
+add_filter("get_avatar", "ballstreet_disable_gravatar", 10, 5);
+
+/**
+ * Serve images in modern formats (WebP/AVIF)
+ *
+ * WordPress 6.1+ generates WebP/AVIF sub-sizes automatically.
+ * The original upload is preserved; only thumbnails/sub-sizes use the modern format.
+ * Existing images need to be regenerated: wp media regenerate --yes
+ */
+add_filter("image_editor_output_format", function (array $formats): array {
+    // Convert JPEG and PNG uploads to WebP/AVIF for sub-sizes
+    if (
+        function_exists("imageavif") ||
+        (extension_loaded("imagick") && \Imagick::queryFormats("AVIF"))
+    ) {
+        $formats["image/jpeg"] = "image/avif";
+        $formats["image/png"] = "image/avif";
+    } elseif (
+        function_exists("imagewebp") ||
+        (extension_loaded("imagick") && \Imagick::queryFormats("WEBP"))
+    ) {
+        $formats["image/jpeg"] = "image/webp";
+        $formats["image/png"] = "image/webp";
+    }
+    return $formats;
+});
