@@ -454,20 +454,24 @@ function ballstreet_disable_gravatar(
         $size .
         " " .
         $size .
-        '"><rect fill="%23374151" width="' .
+        '"><rect fill="#374151" width="' .
         $size .
         '" height="' .
         $size .
-        '"/><text x="50%25" y="50%25" fill="%23d1d5db" font-family="sans-serif" font-size="' .
+        '" rx="' .
+        $size / 2 .
+        '"/><text x="50%" y="50%" fill="#d1d5db" font-family="sans-serif" font-size="' .
         $size * 0.4 .
         '" text-anchor="middle" dy=".35em">' .
         $initials .
         "</text></svg>";
 
+    $encoded = "data:image/svg+xml;base64," . base64_encode($svg);
+
     return '<img alt="' .
         esc_attr($alt) .
-        '" src="data:image/svg+xml,' .
-        $svg .
+        '" src="' .
+        $encoded .
         '" class="avatar avatar-' .
         $size .
         '" height="' .
