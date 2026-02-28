@@ -7,57 +7,12 @@
 
 get_header();
 
-// Enqueue styles
-if (defined("BALLSTREET_URI") && defined("BALLSTREET_VERSION")) {
-    wp_enqueue_style(
-        "ballstreet-single-athlete",
-        BALLSTREET_URI . "/css/single-athlete.css",
-        ["ballstreet-base"],
-        BALLSTREET_VERSION,
-    );
-} else {
-    wp_enqueue_style(
-        "ballstreet-single-athlete",
-        get_template_directory_uri() . "/css/single-athlete.css",
-        [],
-        "1.0.0",
-    );
-}
-
-// Helper function to safely get ACF fields
-if (!function_exists("ballstreet_get_field")) {
-    function ballstreet_get_field($field_name, $post_id = false)
-    {
-        if (function_exists("get_field")) {
-            return get_field($field_name, $post_id);
-        }
-        return get_post_meta($post_id ?: get_the_ID(), $field_name, true);
-    }
-}
-
-// Ensure format value function exists
-if (!function_exists("ballstreet_format_value")) {
-    function ballstreet_format_value($value)
-    {
-        if (!$value) {
-            return "—";
-        }
-        if ($value >= 1000000) {
-            return "$" . number_format($value / 1000000, 1) . "M";
-        } elseif ($value >= 1000) {
-            return "$" . number_format($value / 1000, 0) . "K";
-        }
-        return "$" . number_format($value);
-    }
-}
-
-// Ensure icon function exists
-if (!function_exists("ballstreet_icon")) {
-    function ballstreet_icon($name, $size = 20)
-    {
-        return '<span class="icon icon-' . esc_attr($name) . '"></span>';
-    }
-}
+wp_enqueue_style(
+    "ballstreet-single-athlete",
+    BALLSTREET_URI . "/css/single-athlete.css",
+    ["ballstreet-base"],
+    BALLSTREET_VERSION,
+);
 
 while (have_posts()):
 
@@ -168,9 +123,7 @@ while (have_posts()):
                         "class" => "related-post-image",
                     ])
                     : null,
-                "read_time" => function_exists("ballstreet_get_read_time")
-                    ? ballstreet_get_read_time($post_content)
-                    : 5,
+                "read_time" => ballstreet_get_read_time($post_content),
             ];
         }
         wp_reset_postdata();
@@ -427,11 +380,7 @@ while (have_posts()):
                                 $deal_type = !empty($deal_types)
                                     ? $deal_types[0]->name
                                     : "Deal";
-                                $deal_type_class = function_exists(
-                                    "ballstreet_get_deal_class",
-                                )
-                                    ? ballstreet_get_deal_class($deal_type)
-                                    : "nil";
+                                $deal_type_class = ballstreet_get_deal_class($deal_type);
                                 $deal_details =
                                     get_field("deal_details", $deal_id) ?: "";
                                 ?>

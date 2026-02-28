@@ -86,6 +86,23 @@ get_header(); ?>
         <h2 class="newsletter-title">The Morning Briefing</h2>
         <p class="newsletter-desc">Get the day's biggest deals, contract moves, and market analysis delivered to your inbox before the markets open. Join 15,000+ sports business professionals.</p>
     </div>
+    <?php
+    $newsletter_status = isset($_GET["newsletter"])
+        ? sanitize_text_field($_GET["newsletter"])
+        : "";
+    if ($newsletter_status): ?>
+        <div class="newsletter-message newsletter-<?php echo esc_attr($newsletter_status); ?>">
+            <?php
+            $messages = [
+                "success" => "You're subscribed! Check your inbox.",
+                "exists" => "You're already subscribed.",
+                "invalid" => "Please enter a valid email address.",
+                "error" => "Something went wrong. Please try again.",
+            ];
+            echo esc_html($messages[$newsletter_status] ?? $messages["error"]);
+            ?>
+        </div>
+    <?php endif; ?>
     <form class="newsletter-form" action="<?php echo esc_url(
         admin_url("admin-post.php"),
     ); ?>" method="post">

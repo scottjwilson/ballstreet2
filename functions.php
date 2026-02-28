@@ -16,5 +16,11 @@ require_once get_template_directory() . "/inc/vite.php";
 // Custom post types
 require_once get_template_directory() . "/inc/post-types.php";
 
-// Template helper functions
+// Template helper functions (utilities, formatting, field accessors)
 require_once get_template_directory() . "/inc/template-functions.php";
+
+// Placeholder/dummy data (can be removed once real content exists)
+require_once get_template_directory() . "/inc/dummy-data.php";
+
+// Template rendering functions (HTML output for components)
+require_once get_template_directory() . "/inc/template-render.php";

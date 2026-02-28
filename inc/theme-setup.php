@@ -12,6 +12,21 @@ define("BALLSTREET_DIR", get_template_directory());
 define("BALLSTREET_URI", get_template_directory_uri());
 
 /**
+ * Show admin notice if ACF is not active
+ */
+function ballstreet_check_acf_dependency(): void
+{
+    if (!function_exists("get_field")) {
+        echo '<div class="notice notice-warning is-dismissible"><p>';
+        echo '<strong>Ball Street Sports Journal</strong> requires ';
+        echo '<a href="https://www.advancedcustomfields.com/" target="_blank">Advanced Custom Fields</a> ';
+        echo 'for athlete profiles, deal data, and other custom field functionality.';
+        echo '</p></div>';
+    }
+}
+add_action("admin_notices", "ballstreet_check_acf_dependency");
+
+/**
  * Register theme supports and navigation menus
  */
 function ballstreet_setup(): void
@@ -254,84 +269,46 @@ function ballstreet_excerpt_more(string $more): string
 add_filter("excerpt_more", "ballstreet_excerpt_more");
 
 /**
- * SVG Icons
+ * SVG Icons - loads from icons/ directory with in-memory cache
+ *
+ * Icons are stored as individual .svg files in the theme's icons/ directory.
+ * Each file contains a viewBox-only SVG (no width/height), and this function
+ * injects the requested size attributes.
+ *
+ * @param string $name Icon name (filename without .svg)
+ * @param int $size Icon width and height in pixels
+ * @return string SVG markup with size attributes, or empty string if not found
  */
 function ballstreet_icon(string $name, int $size = 20): string
 {
-    $icons = [
-        "arrow-right" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 4.167L15.833 10 10 15.833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "arrow-up" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M10 15.833V4.167M4.167 10L10 4.167 15.833 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "arrow-down" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M10 4.167v11.666M4.167 10L10 15.833 15.833 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "chart" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M15 16.667V8.333M10 16.667V3.333M5 16.667v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "dollar" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M10 1.667v16.666M14.167 5H7.917a2.917 2.917 0 000 5.833h4.166a2.917 2.917 0 010 5.834H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "trending-up" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><path d="M19.167 5.833l-7.5 7.5-4.167-4.166-6.667 6.666" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.167 5.833h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "menu" =>
-            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "close" =>
-            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "search" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 20 20" fill="none"><circle cx="9.167" cy="9.167" r="5.833" stroke="currentColor" stroke-width="1.5"/><path d="M17.5 17.5l-3.625-3.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-        "sun" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
-        "moon" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "table" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 24 24" fill="none"><path d="M3 3h18v18H3V3zM3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        "grid" =>
-            '<svg width="' .
-            $size .
-            '" height="' .
-            $size .
-            '" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg>',
-    ];
+    static $cache = [];
 
-    return $icons[$name] ?? "";
+    // Sanitize name to prevent directory traversal
+    $name = preg_replace("/[^a-z0-9\-]/", "", $name);
+    if (!$name) {
+        return "";
+    }
+
+    // Load SVG content (cached per request)
+    if (!isset($cache[$name])) {
+        $file = BALLSTREET_DIR . "/icons/{$name}.svg";
+        if (file_exists($file)) {
+            $cache[$name] = file_get_contents($file);
+        } else {
+            $cache[$name] = false;
+        }
+    }
+
+    if ($cache[$name] === false) {
+        return "";
+    }
+
+    // Inject width/height into the <svg> tag
+    return str_replace(
+        "<svg ",
+        '<svg width="' . $size . '" height="' . $size . '" ',
+        $cache[$name],
+    );
 }
 
 /**
@@ -380,12 +357,12 @@ function ballstreet_remove_bloat(): void
 add_action("after_setup_theme", "ballstreet_remove_bloat");
 
 /**
- * Remove jQuery migrate (not needed with vanilla JS theme)
+ * Remove unnecessary scripts and styles on the frontend
  */
 function ballstreet_dequeue_unnecessary_scripts(): void
 {
     if (!is_admin()) {
-        wp_deregister_script("jquery");
+        wp_dequeue_script("jquery");
         wp_dequeue_style("wp-block-library");
         wp_dequeue_style("classic-theme-styles");
         wp_dequeue_style("global-styles");
@@ -506,3 +483,80 @@ add_filter("image_editor_output_format", function (array $formats): array {
     }
     return $formats;
 });
+
+/**
+ * Invalidate front page transient caches when CPT content changes
+ */
+function ballstreet_invalidate_caches(int $post_id): void
+{
+    $post_type = get_post_type($post_id);
+
+    if ($post_type === "deal") {
+        delete_transient("ballstreet_ticker_items");
+        // Clear all deal grid cache variants
+        delete_transient("ballstreet_deals_grid_3_featured");
+        delete_transient("ballstreet_deals_grid_3_all");
+        delete_transient("ballstreet_deals_grid_6_featured");
+        delete_transient("ballstreet_deals_grid_6_all");
+    }
+
+    if ($post_type === "athlete") {
+        delete_transient("ballstreet_athlete_rows_5");
+        delete_transient("ballstreet_athlete_rows_10");
+    }
+}
+add_action("save_post", "ballstreet_invalidate_caches");
+add_action("trash_post", "ballstreet_invalidate_caches");
+
+/**
+ * Handle newsletter subscription form
+ *
+ * Stores subscribers in the wp_options table as a simple list.
+ * Replace with a proper email service integration (Mailchimp, ConvertKit, etc.)
+ * for production use.
+ */
+function ballstreet_handle_newsletter(): void
+{
+    // Verify nonce
+    if (
+        !isset($_POST["newsletter_nonce"]) ||
+        !wp_verify_nonce($_POST["newsletter_nonce"], "ballstreet_newsletter")
+    ) {
+        wp_safe_redirect(
+            add_query_arg("newsletter", "error", wp_get_referer() ?: home_url("/")),
+        );
+        exit();
+    }
+
+    // Sanitize and validate email
+    $email = isset($_POST["email"])
+        ? sanitize_email($_POST["email"])
+        : "";
+
+    if (!is_email($email)) {
+        wp_safe_redirect(
+            add_query_arg("newsletter", "invalid", wp_get_referer() ?: home_url("/")),
+        );
+        exit();
+    }
+
+    // Store subscriber (simple option-based storage)
+    $subscribers = get_option("ballstreet_newsletter_subscribers", []);
+
+    if (in_array($email, $subscribers, true)) {
+        wp_safe_redirect(
+            add_query_arg("newsletter", "exists", wp_get_referer() ?: home_url("/")),
+        );
+        exit();
+    }
+
+    $subscribers[] = $email;
+    update_option("ballstreet_newsletter_subscribers", $subscribers);
+
+    wp_safe_redirect(
+        add_query_arg("newsletter", "success", wp_get_referer() ?: home_url("/")),
+    );
+    exit();
+}
+add_action("admin_post_ballstreet_newsletter", "ballstreet_handle_newsletter");
+add_action("admin_post_nopriv_ballstreet_newsletter", "ballstreet_handle_newsletter");
