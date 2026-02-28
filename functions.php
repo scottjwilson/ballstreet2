@@ -24,3 +24,6 @@ require_once get_template_directory() . "/inc/dummy-data.php";
 
 // Template rendering functions (HTML output for components)
 require_once get_template_directory() . "/inc/template-render.php";
+
+// JSON-LD structured data for SEO
+require_once get_template_directory() . "/inc/json-ld.php";
